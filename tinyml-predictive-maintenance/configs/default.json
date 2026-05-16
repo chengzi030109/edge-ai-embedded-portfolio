@@ -1,0 +1,16 @@
+{
+  "sample_rate_hz": 1600,
+  "window_size": 256,
+  "train_windows": 600,
+  "duration_s": 20.0,
+  "states": [
+    "normal",
+    "imbalance",
+    "rubbing",
+    "bearing"
+  ],
+  "model_path": "artifacts/model.json",
+  "telemetry_path": "runs/telemetry.jsonl",
+  "evaluation_json": "reports/evaluation.json",
+  "evaluation_md": "reports/evaluation.md"
+}

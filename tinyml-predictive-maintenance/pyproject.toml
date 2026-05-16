@@ -1,0 +1,11 @@
+[project]
+name = "tinyml-predictive-maintenance"
+version = "0.1.0"
+description = "Hardware-free TinyML predictive maintenance prototype"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

@@ -1,0 +1,14 @@
+[project]
+name = "edgebench"
+version = "0.1.0"
+description = "Lightweight edge AI model benchmark tool"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.scripts]
+edgebench = "edgebench.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

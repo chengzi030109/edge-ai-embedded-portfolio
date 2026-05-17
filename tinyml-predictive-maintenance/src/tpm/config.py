@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Project configuration loading.
 
 The project can run entirely from command-line defaults, but a JSON config file
@@ -8,6 +6,8 @@ fields here intentionally mirror the parameters a real embedded deployment would
 care about: sample rate, window size, model path, telemetry path, and report
 locations.
 """
+
+from __future__ import annotations
 
 import json
 from dataclasses import dataclass

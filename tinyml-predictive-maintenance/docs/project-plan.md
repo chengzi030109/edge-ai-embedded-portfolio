@@ -14,12 +14,13 @@
 
 - Add MQTT transport.
 - Add ONNX or TFLite export.
-- Add INT8 quantization simulation.
+- Add INT8/fixed-point quantization simulation.
 - Add packet loss and network reconnect tests.
 - Extend the C implementation with FFT band-power features through CMSIS-DSP.
 - Add hardware migration guide for ESP32-S3 or STM32.
 - Add screenshots from the Streamlit dashboard.
 - Add a comparison table against a small 1D-CNN or autoencoder baseline.
+- Add PHM2008/C-MAPSS degradation detection as a harder non-ceiling dataset.
 
 ## Interview Talking Points
 

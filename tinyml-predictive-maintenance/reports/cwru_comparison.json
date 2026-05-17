@@ -1,0 +1,188 @@
+{
+  "source": "cwru",
+  "data_root": "data\\cwru",
+  "sample_rate_hz": 12000,
+  "window_size": 1024,
+  "labels": [
+    "normal",
+    "inner",
+    "outer",
+    "ball"
+  ],
+  "n_train": 280,
+  "n_test": 832,
+  "n_test_normal": 120,
+  "n_test_fault": 712,
+  "models": [
+    {
+      "name": "CentroidAnomalyDetector",
+      "size_bytes": 641,
+      "per_label": {
+        "normal": 0.0,
+        "inner": 1.0,
+        "outer": 1.0,
+        "ball": 1.0
+      },
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 0.0
+      },
+      "confusion": {
+        "tp": 712,
+        "tn": 120,
+        "fp": 0,
+        "fn": 0
+      },
+      "threshold": 6.7796149253845215,
+      "latency_ms": {
+        "avg": 0.003405648105679295,
+        "p95": 0.0036999699659645557
+      },
+      "score": {
+        "mean": 103.19546508789062,
+        "max": 262.6912841796875,
+        "min": 1.3423302173614502
+      }
+    },
+    {
+      "name": "IsolationForest",
+      "size_bytes": 1227444,
+      "per_label": {
+        "normal": 0.0,
+        "inner": 1.0,
+        "outer": 1.0,
+        "ball": 0.8987341772151899
+      },
+      "metrics": {
+        "accuracy": 0.9711538461538461,
+        "precision": 1.0,
+        "recall": 0.9662921348314607,
+        "f1": 0.9828571428571428,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 0.033707865168539325
+      },
+      "confusion": {
+        "tp": 688,
+        "tn": 120,
+        "fp": 0,
+        "fn": 24
+      },
+      "threshold": 0.6781276445690555,
+      "latency_ms": {
+        "avg": 5.005009856246873,
+        "p95": 6.742960005067289
+      },
+      "score": {
+        "mean": 0.6772274374961853,
+        "max": 0.7279570698738098,
+        "min": 0.38591787219047546
+      }
+    },
+    {
+      "name": "OneClassSVM",
+      "size_bytes": 2600,
+      "per_label": {
+        "normal": 0.0,
+        "inner": 1.0,
+        "outer": 1.0,
+        "ball": 1.0
+      },
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 0.0
+      },
+      "confusion": {
+        "tp": 712,
+        "tn": 120,
+        "fp": 0,
+        "fn": 0
+      },
+      "threshold": 0.12450856780774665,
+      "latency_ms": {
+        "avg": 0.06242644247742227,
+        "p95": 0.09354501380585134
+      },
+      "score": {
+        "mean": 8.612532615661621,
+        "max": 10.083013534545898,
+        "min": -0.27949899435043335
+      }
+    },
+    {
+      "name": "LocalOutlierFactor",
+      "size_bytes": 64762,
+      "per_label": {
+        "normal": 0.008333333333333333,
+        "inner": 1.0,
+        "outer": 1.0,
+        "ball": 1.0
+      },
+      "metrics": {
+        "accuracy": 0.9987980769230769,
+        "precision": 0.9985974754558204,
+        "recall": 1.0,
+        "f1": 0.999298245614035,
+        "false_positive_rate": 0.008333333333333333,
+        "false_negative_rate": 0.0
+      },
+      "confusion": {
+        "tp": 712,
+        "tn": 119,
+        "fp": 1,
+        "fn": 0
+      },
+      "threshold": 1.1862899541854857,
+      "latency_ms": {
+        "avg": 0.3166725974341926,
+        "p95": 0.41368998063262535
+      },
+      "score": {
+        "mean": 132.73519897460938,
+        "max": 164.6261749267578,
+        "min": -0.5492914319038391
+      }
+    },
+    {
+      "name": "Autoencoder1D",
+      "size_bytes": 12031,
+      "per_label": {
+        "normal": 0.0,
+        "inner": 1.0,
+        "outer": 1.0,
+        "ball": 1.0
+      },
+      "metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 0.0
+      },
+      "confusion": {
+        "tp": 712,
+        "tn": 120,
+        "fp": 0,
+        "fn": 0
+      },
+      "threshold": 0.7489161223173141,
+      "latency_ms": {
+        "avg": 0.14499218832497718,
+        "p95": 0.1914450025651604
+      },
+      "score": {
+        "mean": 246.73385620117188,
+        "max": 882.9967651367188,
+        "min": 0.009810930117964745
+      }
+    }
+  ]
+}

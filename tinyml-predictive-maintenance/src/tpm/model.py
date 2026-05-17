@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Tiny anomaly detector used by the predictive-maintenance prototype.
 
 The model is deliberately simple: it learns the centroid and standard deviation
@@ -9,6 +7,8 @@ This is not meant to beat deep-learning baselines. It is chosen because it is
 easy to explain, tiny to serialize, and close to something that can be ported to
 embedded C when hardware becomes available.
 """
+
+from __future__ import annotations
 
 import json
 from dataclasses import dataclass

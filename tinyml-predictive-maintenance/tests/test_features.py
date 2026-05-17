@@ -7,7 +7,7 @@ and edgebench input-size assumptions.
 
 import numpy as np
 
-from tpm.features import FeatureConfig, extract_features, vectorize
+from tpm.features import FEATURE_NAMES, FeatureConfig, extract_features, vectorize
 
 
 def test_extract_features_returns_stable_vector():
@@ -20,7 +20,7 @@ def test_extract_features_returns_stable_vector():
     vector = vectorize(features)
 
     # The vector size is part of the model/benchmark contract.
-    assert vector.shape[0] == 10
+    assert vector.shape[0] == len(FEATURE_NAMES)
 
     # A unit sine wave has RMS near 0.707; the loose bound leaves room for the
     # finite window not containing an exact integer number of periods.

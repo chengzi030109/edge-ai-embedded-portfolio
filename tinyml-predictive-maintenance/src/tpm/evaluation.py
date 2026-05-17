@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Evaluation utilities for the predictive-maintenance model.
 
 The runtime node answers the question "can the system run end to end?" This file
@@ -7,6 +5,8 @@ answers the interview question "how well does the detector work?" It generates
 balanced synthetic test windows for each state, runs the model, and computes
 binary anomaly-detection metrics without requiring scikit-learn.
 """
+
+from __future__ import annotations
 
 import json
 import time
@@ -29,7 +29,7 @@ def confusion_counts(y_true: Iterable[bool], y_pred: Iterable[bool]) -> dict[str
     """
 
     counts = {"tp": 0, "tn": 0, "fp": 0, "fn": 0}
-    for truth, pred in zip(y_true, y_pred):
+    for truth, pred in zip(y_true, y_pred, strict=False):
         if truth and pred:
             counts["tp"] += 1
         elif not truth and not pred:
@@ -119,7 +119,7 @@ def evaluate_model(
     counts = confusion_counts(y_true, y_pred)
     summary = metrics_from_counts(counts)
 
-    for state, state_stats in per_state.items():
+    for _state, state_stats in per_state.items():
         windows = int(state_stats["windows"])
         detected = int(state_stats["detected"])
         state_stats["detection_rate"] = safe_div(detected, windows)

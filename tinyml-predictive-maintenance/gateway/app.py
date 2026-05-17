@@ -39,16 +39,20 @@ if not rows:
 
 df = pd.DataFrame(rows)
 latest = df.iloc[-1]
+alarm_col = "is_alarm" if "is_alarm" in df.columns else "is_anomaly"
 
 # Top-level operational metrics: this is what an operator would glance at first.
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Latest State", latest["true_state"])
 col2.metric("Anomaly Score", f"{latest['score']:.2f}")
 col3.metric("Threshold", f"{latest['threshold']:.2f}")
-col4.metric("Alarms", int(df["is_anomaly"].sum()))
+col4.metric("Debounced Alarms", int(df[alarm_col].sum()))
 
 # Plot score and threshold together so alarms are visually explainable.
 st.line_chart(df.set_index("seq")[["score", "threshold"]])
+
+if "is_alarm" in df.columns:
+    st.line_chart(df.set_index("seq")[["is_anomaly_raw", "is_alarm"]])
 
 with st.expander("Recent telemetry"):
     # Keep the full raw table accessible for debugging model behavior.

@@ -1,0 +1,47 @@
+{
+  "source": "cwru",
+  "n_train": 280,
+  "n_test": 832,
+  "n_features": 10,
+  "latent_dim": 4,
+  "formats": [
+    {
+      "name": "PyTorch FP32 (reference)",
+      "size_bytes": 12031,
+      "latency_ms_avg": 0.2908057685300054,
+      "latency_ms_p95": 0.43067998776677996,
+      "mae": 0.0,
+      "max_abs_error": 0.0,
+      "mre": 0.0,
+      "mean_score": 217.3016899473738,
+      "std_score": 227.756048217276
+    },
+    {
+      "name": "ONNX FP32",
+      "size_bytes": 9598,
+      "latency_ms_avg": 0.030294471518852964,
+      "latency_ms_p95": 0.05174498655833303,
+      "mae": 6.127030008848614e-05,
+      "max_abs_error": 0.000732421875,
+      "mre": 2.7642398411508677e-07
+    },
+    {
+      "name": "ONNX INT8 (dynamic)",
+      "size_bytes": 11640,
+      "latency_ms_avg": 0.043763581603483405,
+      "latency_ms_p95": 0.04983499820809809,
+      "mae": 12.923913454514919,
+      "max_abs_error": 60.502685546875,
+      "mre": 0.04827227814399347
+    },
+    {
+      "name": "ONNX INT8 (static)",
+      "size_bytes": 11955,
+      "latency_ms_avg": 0.041127162848379854,
+      "latency_ms_p95": 0.06748999003320931,
+      "mae": 1389.3248738826694,
+      "max_abs_error": 5861.5982666015625,
+      "mre": 3.8377954589029293
+    }
+  ]
+}

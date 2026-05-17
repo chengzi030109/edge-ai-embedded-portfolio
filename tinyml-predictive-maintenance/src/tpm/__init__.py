@@ -8,6 +8,7 @@ Package responsibilities:
 - ``telemetry`` writes gateway-readable messages
 - ``evaluation`` computes reportable anomaly-detection metrics
 - ``config`` loads reproducible project settings
+- ``alarm`` debounces raw window decisions into stable device alarms
 """
 
 __all__ = ["__version__"]

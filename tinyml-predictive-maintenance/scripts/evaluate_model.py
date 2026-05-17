@@ -8,8 +8,8 @@ console output from the simulated node.
 """
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Keep direct script execution simple:
 #   python scripts/evaluate_model.py
@@ -33,9 +33,9 @@ def main() -> None:
     args = parser.parse_args()
 
     cfg = load_config(args.config)
-    model_path = args.model or cfg.model_path
-    json_out = args.json_out or cfg.evaluation_json
-    md_out = args.md_out or cfg.evaluation_md
+    model_path = args.model if args.model is not None else cfg.model_path
+    json_out = args.json_out if args.json_out is not None else cfg.evaluation_json
+    md_out = args.md_out if args.md_out is not None else cfg.evaluation_md
 
     model = CentroidAnomalyDetector.load(model_path)
     report = evaluate_model(

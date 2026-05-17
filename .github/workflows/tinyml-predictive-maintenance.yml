@@ -1,0 +1,96 @@
+name: tinyml-predictive-maintenance
+
+on:
+  push:
+    paths:
+      - 'tinyml-predictive-maintenance/**'
+      - '.github/workflows/tinyml-predictive-maintenance.yml'
+  pull_request:
+    paths:
+      - 'tinyml-predictive-maintenance/**'
+      - '.github/workflows/tinyml-predictive-maintenance.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: tinyml-predictive-maintenance
+
+jobs:
+  # Fast feedback loop. Skips torch (heavy install, 200+ MB) so the
+  # signal/feature/centroid/baselines/CWRU code path lints + tests in under
+  # a minute. Tests that import torch use pytest.importorskip and stay green.
+  test-lite:
+    name: pytest-lite (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: tinyml-predictive-maintenance/requirements.txt
+
+      - name: Install non-torch dependencies
+        # Pull only what the lite path needs. Tests that import torch are
+        # skipped automatically because the module is absent.
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scikit-learn scipy pytest
+
+      - name: Run pytest
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+          PYTHONIOENCODING: 'utf-8'
+        run: pytest -q
+
+  # Full path including the autoencoder. Slower because torch is large, but
+  # only runs on Linux (Windows torch wheels are even larger and rarely add
+  # signal beyond what Linux already covered).
+  test-full:
+    name: pytest-full (ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: tinyml-predictive-maintenance/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pytest
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+          PYTHONIOENCODING: 'utf-8'
+        run: pytest -q
+
+  lint:
+    name: ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Lint
+        run: ruff check src tests scripts

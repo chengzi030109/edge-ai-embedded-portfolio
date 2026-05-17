@@ -6,4 +6,9 @@ artifacts/
 runs/
 .streamlit/
 *.egg-info/
-
+**/data/cwru/
+**/data/phm2008/
+**/data/phm2008_raw/
+*.exe
+*.obj
+*.o

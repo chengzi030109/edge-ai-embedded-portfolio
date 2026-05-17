@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Feature extraction for the simulated TinyML maintenance node.
 
 This module represents the kind of signal-processing code that would normally
@@ -11,6 +9,8 @@ Why this matters for embedded AI:
 - compact features make the model smaller and easier to port to C
 - FFT band features are explainable during interviews and debugging
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Dict
@@ -94,19 +94,16 @@ def extract_features(samples: np.ndarray, config: FeatureConfig) -> Dict[str, fl
         mask = (freqs >= lo) & (freqs < hi)
         return float(np.sum(power[mask]) / total_power)
 
-    # Standardized third/fourth moments. The small epsilon prevents division by
-    # zero if a test passes an almost-constant window.
+    # Standardized fourth moment (kurtosis). The small epsilon prevents division
+    # by zero if a test passes an almost-constant window.
     fourth = float(np.mean((centered / (std + eps)) ** 4))
-    third = float(np.mean((centered / (std + eps)) ** 3))
 
     return {
-        "mean": float(np.mean(x)),
         "rms": rms,
         "std": std,
         "peak_to_peak": float(np.ptp(x)),
         "crest_factor": abs_peak / (rms + eps),
         "kurtosis": fourth,
-        "skewness": third,
         "dominant_freq_hz": float(freqs[dominant_idx]),
         "spectral_centroid_hz": spectral_centroid,
         "low_band_power": band_power(config.low_band_hz),

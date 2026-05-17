@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Synthetic motor vibration source for hardware-free development.
 
 Until real hardware is available, this simulator stands in for an accelerometer
@@ -7,6 +5,8 @@ attached to a motor, fan, or pump. It produces repeatable windows for several
 states so the rest of the project can be built as if an MCU sensor driver
 already existed.
 """
+
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Iterator

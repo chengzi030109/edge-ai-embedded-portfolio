@@ -9,8 +9,8 @@ JSON model that can be benchmarked by the sibling ``edgebench`` project.
 """
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # The project is not installed as a package during quick demos, so add ``src``
 # to the import path. This keeps the command runnable with plain:
@@ -39,10 +39,10 @@ def main() -> None:
     # them. This makes scripted demos reproducible while keeping ad-hoc
     # experiments convenient.
     cfg = load_config(args.config)
-    out_path = args.out or cfg.model_path
-    train_windows = args.windows or cfg.train_windows
-    window_size = args.window_size or cfg.window_size
-    sample_rate = args.sample_rate or cfg.sample_rate_hz
+    out_path = args.out if args.out is not None else cfg.model_path
+    train_windows = args.windows if args.windows is not None else cfg.train_windows
+    window_size = args.window_size if args.window_size is not None else cfg.window_size
+    sample_rate = args.sample_rate if args.sample_rate is not None else cfg.sample_rate_hz
 
     simulator = MotorSignalSimulator(SignalConfig(sample_rate_hz=sample_rate))
     feature_cfg = FeatureConfig(sample_rate_hz=sample_rate)

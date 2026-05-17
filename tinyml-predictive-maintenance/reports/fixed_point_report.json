@@ -1,0 +1,15 @@
+{
+  "float_model_bytes": 84,
+  "fixed_point_bytes": 84,
+  "n_vectors": 80,
+  "decision_mismatches": 0,
+  "score_error": {
+    "mean_abs": 0.1406357169151306,
+    "max_abs": 0.303466796875
+  },
+  "quantization": {
+    "q_fractional_bits": 8,
+    "q_step": 0.00390625,
+    "threshold_q": 1559
+  }
+}

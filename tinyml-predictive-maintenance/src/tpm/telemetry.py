@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Telemetry output helpers.
 
 The first implementation writes JSON Lines instead of using a real MQTT broker.
@@ -7,6 +5,8 @@ That keeps the project hardware-free and easy to run on any laptop, while still
 preserving a message-oriented architecture. A future MQTT sink can implement the
 same ``publish`` method and be swapped into the node loop.
 """
+
+from __future__ import annotations
 
 import json
 from pathlib import Path

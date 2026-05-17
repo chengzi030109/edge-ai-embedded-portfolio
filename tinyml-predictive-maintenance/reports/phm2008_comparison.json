@@ -1,0 +1,40 @@
+{
+  "source": "phm2008-cmapss",
+  "source_file": "data\\phm2008_sample\\train_FD001.txt",
+  "window_size": 30,
+  "hop": 10,
+  "n_features": 32,
+  "n_train": 25,
+  "n_test": 47,
+  "n_anomaly": 36,
+  "models": [
+    {
+      "name": "CentroidAnomalyDetector",
+      "size_bytes": 260,
+      "metrics": {
+        "accuracy": 0.9361702127659575,
+        "precision": 0.9230769230769231,
+        "recall": 1.0,
+        "f1": 0.9600000000000001,
+        "false_positive_rate": 0.2727272727272727,
+        "false_negative_rate": 0.0
+      },
+      "confusion": {
+        "tp": 36,
+        "tn": 8,
+        "fp": 3,
+        "fn": 0
+      },
+      "latency_ms": {
+        "avg": 0.003170212136304125,
+        "p95": 0.003390025813132522
+      },
+      "score": {
+        "mean": 17.461788735491165,
+        "min": 4.781930923461914,
+        "max": 24.953876495361328
+      },
+      "threshold": 6.7084174156188965
+    }
+  ]
+}

@@ -9,6 +9,7 @@ runs/
 **/data/cwru/
 **/data/phm2008/
 **/data/phm2008_raw/
+**/data/phm2008*/raw/
 *.exe
 *.obj
 *.o

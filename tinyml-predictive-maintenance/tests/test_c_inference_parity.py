@@ -18,6 +18,7 @@ from __future__ import annotations
 import shutil
 import struct
 import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -37,6 +38,10 @@ def _find_compiler() -> tuple[str, list[str]] | None:
     for name in ("gcc", "cc", "clang"):
         path = shutil.which(name)
         if path:
+            # TinyCC is a compact Windows fallback installed as cc.exe in this
+            # workspace. It does not ship a separate libm, so avoid GCC's -lm.
+            if (Path(path).parent / "tcc.exe").exists():
+                return path, []
             return path, ["-O2", "-std=c99", "-lm"]
     cl = shutil.which("cl")
     if cl:
@@ -60,7 +65,7 @@ def compiled_harness(tmp_path_factory) -> Path:
     # re-exporting.
     subprocess.run(
         [
-            "python",
+            sys.executable,
             str(ROOT / "scripts" / "export_model_to_c.py"),
             "--model",
             str(MODEL_JSON),

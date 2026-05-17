@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-"""Generate static PNG figures for README/report use."""
+"""Generate static PNG figures for README/report use.
+
+The project treats figures as lightweight build artifacts, not as hand-edited
+screenshots. Every plot can be regenerated from JSON/JSONL reports, and each
+matplotlib plot has a Pillow fallback so the Windows laptop demo still works
+when optional plotting dependencies are missing.
+"""
 
 import argparse
 import json
@@ -104,6 +110,53 @@ def _fallback_bar_line(names: list[str], bars: list[float], line: list[float], t
     print(f"wrote {out} (Pillow fallback)")
 
 
+def plot_portfolio_pipeline(out: Path) -> None:
+    """Draw the end-to-end demo pipeline as a generated PNG.
+
+    The pipeline is not a measured chart, so using Pillow directly is simpler
+    than forcing it through matplotlib. It gives the README a first-screen
+    visual that explains the embedded AI story before readers dive into code.
+    """
+
+    from PIL import Image, ImageDraw
+
+    width, height = 1300, 360
+    margin_x = 45
+    box_w = 185
+    box_h = 92
+    y = 130
+    stages = [
+        ("Sensor", "simulator / CSV"),
+        ("Window", "256 samples"),
+        ("Features", "FFT + stats"),
+        ("Detector", "centroid score"),
+        ("Alarm", "debounced"),
+        ("Telemetry", "JSONL report"),
+    ]
+    colors = ["#2f6f73", "#6a7f2a", "#9b6b1f", "#7c4d8a", "#a34545", "#345f9c"]
+    img = Image.new("RGB", (width, height), "#f7f7f4")
+    draw = ImageDraw.Draw(img)
+    draw.text((margin_x, 35), "TinyML predictive-maintenance demo pipeline", fill="#111111")
+    draw.text((margin_x, 62), "Laptop prototype today; sensor driver and RTOS tasks replace the left edge on MCU.", fill="#333333")
+
+    for idx, ((title, subtitle), color) in enumerate(zip(stages, colors, strict=False)):
+        x = margin_x + idx * (box_w + 26)
+        draw.rounded_rectangle((x, y, x + box_w, y + box_h), radius=8, fill="white", outline=color, width=3)
+        draw.text((x + 18, y + 24), title, fill=color)
+        draw.text((x + 18, y + 52), subtitle, fill="#222222")
+        if idx < len(stages) - 1:
+            ax0 = x + box_w + 4
+            ax1 = x + box_w + 22
+            ay = y + box_h / 2
+            draw.line((ax0, ay, ax1, ay), fill="#333333", width=3)
+            draw.polygon([(ax1, ay), (ax1 - 8, ay - 6), (ax1 - 8, ay + 6)], fill="#333333")
+
+    draw.text((margin_x, 285), "Firmware path: CMSIS-DSP features -> float C parity now -> Q-format C inference next.", fill="#111111")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out)
+    print(f"wrote {out} (Pillow pipeline)")
+
+
 def plot_synthetic_score_curve(telemetry: str | Path, out: Path) -> None:
     """Plot model score and threshold from node telemetry."""
 
@@ -186,21 +239,55 @@ def plot_quantization(report_path: str | Path, out: Path) -> None:
     _save(fig, out)
 
 
+def plot_phm2008_comparison(report_path: str | Path, out: Path) -> None:
+    """Plot PHM2008/C-MAPSS model F1 with false-positive rate annotations."""
+
+    report = _load_json(report_path)
+    models = report.get("models", [])
+    if not models:
+        print(f"warning: {report_path} has no model rows; skipping PHM2008 figure")
+        return
+    names = [entry["name"] for entry in models]
+    f1 = [entry["metrics"]["f1"] for entry in models]
+    fpr = [entry["metrics"]["false_positive_rate"] for entry in models]
+    if plt is None:
+        _fallback_bar_line(names, f1, fpr, "PHM2008/C-MAPSS harder degradation comparison", out)
+        return
+    fig, ax1 = plt.subplots(figsize=(8, 3.4))
+    ax1.bar(names, f1, color="#4c78a8", label="F1")
+    ax1.set_ylim(0, 1.05)
+    ax1.set_ylabel("F1")
+    ax1.tick_params(axis="x", rotation=15)
+    ax2 = ax1.twinx()
+    ax2.plot(names, fpr, color="#e45756", marker="o", label="FPR")
+    ax2.set_ylim(0, max(0.35, max(fpr) * 1.2))
+    ax2.set_ylabel("false positive rate")
+    ax1.set_title("PHM2008/C-MAPSS harder degradation comparison")
+    _save(fig, out)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate README/report PNG figures.")
     parser.add_argument("--telemetry", default="runs/telemetry.jsonl")
     parser.add_argument("--cwru-report", default="reports/cwru_comparison.json")
     parser.add_argument("--quant-report", default="reports/quantization_report.json")
+    parser.add_argument("--phm-report", default="reports/phm2008_comparison.json")
     parser.add_argument("--out-dir", default="reports/figures")
     args = parser.parse_args()
 
     out_dir = Path(args.out_dir)
-    plot_synthetic_score_curve(args.telemetry, out_dir / "synthetic_score_curve.png")
-    plot_alarm_timeline(args.telemetry, out_dir / "alarm_debounce_timeline.png")
+    plot_portfolio_pipeline(out_dir / "portfolio_pipeline.png")
+    if Path(args.telemetry).exists():
+        plot_synthetic_score_curve(args.telemetry, out_dir / "synthetic_score_curve.png")
+        plot_alarm_timeline(args.telemetry, out_dir / "alarm_debounce_timeline.png")
+    else:
+        print(f"warning: telemetry file {args.telemetry} not found; skipping telemetry figures")
     if Path(args.cwru_report).exists():
         plot_cwru_comparison(args.cwru_report, out_dir / "cwru_model_comparison.png")
     if Path(args.quant_report).exists():
         plot_quantization(args.quant_report, out_dir / "quantization_size_latency.png")
+    if Path(args.phm_report).exists():
+        plot_phm2008_comparison(args.phm_report, out_dir / "phm2008_comparison.png")
 
 
 if __name__ == "__main__":

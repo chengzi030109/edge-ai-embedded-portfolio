@@ -39,7 +39,13 @@ int tpm_centroid_predict(const float *features,
         float z = (features[i] - model->mean[i]) / model->scale[i];
         sum_squares += z * z;
     }
-    float score = sqrtf(sum_squares);
+    /*
+     * Use sqrt(double) and cast back to float rather than sqrtf(). Some tiny
+     * Windows C toolchains, including TinyCC, expose sqrt through the default
+     * C runtime but do not ship a separate libm/sqrtf symbol. The calculation
+     * remains numerically equivalent for this float32 score.
+     */
+    float score = (float)sqrt((double)sum_squares);
 
     out->score = score;
     out->is_anomaly = (score > model->threshold) ? 1 : 0;

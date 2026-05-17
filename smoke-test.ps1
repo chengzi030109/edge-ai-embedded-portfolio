@@ -18,6 +18,8 @@ Push-Location "$PSScriptRoot\tinyml-predictive-maintenance"
 & $Python scripts\run_simulated_node.py --model artifacts\model.json --source csv --input data\examples\vibration_demo.csv --telemetry runs\csv_telemetry.jsonl
 & $Python scripts\evaluate_model.py --model artifacts\model.json --windows-per-state 40
 & $Python scripts\fixed_point_report.py --model artifacts\model.json --windows-per-state 20
+& $Python scripts\export_model_to_c.py --model artifacts\model.json --out firmware\model_params.h --fixed-out firmware\model_params_fixed.h
+& $Python scripts\mcu_resource_report.py --model artifacts\model.json
 & $Python scripts\prepare_phm2008.py synthetic --out data\phm2008_sample\train_FD001.txt --units 12 --cycles 180 --sensors 6 --seed 2027
 & $Python scripts\compare_phm2008.py --data-root data\phm2008_sample
 & $Python scripts\generate_figures.py

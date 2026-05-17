@@ -7,277 +7,73 @@ name in the badge URL below. The workflow file is already in place at
 -->
 [![CI](https://github.com/OWNER/linux/actions/workflows/tinyml-predictive-maintenance.yml/badge.svg)](https://github.com/OWNER/linux/actions/workflows/tinyml-predictive-maintenance.yml)
 
-Hardware-free prototype of an embedded AI predictive-maintenance node.
-
-This project simulates the full path of an MCU/RTOS vibration-monitoring device
-plus an embedded-Linux style gateway:
+Hardware-free AI + embedded predictive-maintenance project. It simulates an
+MCU/RTOS vibration-monitoring node on a laptop today, while keeping the model,
+feature, alarm, telemetry, and C inference boundaries ready for MCU migration.
 
 ```text
-synthetic motor vibration stream
--> fixed-size sliding windows
--> FFT/statistical feature extraction
+synthetic signal or CSV replay
+-> fixed-size windows
+-> FFT/statistical features
 -> tiny anomaly detector
+-> alarm debounce
 -> JSONL telemetry
--> evaluation reports and dashboard
+-> reports, figures, and MCU migration notes
 ```
 
-The current code runs on a laptop today. Later, the simulated sensor can be
-replaced by an I2C/SPI accelerometer on ESP32-S3, STM32, or another MCU.
+## Portfolio Result Summary
 
-## Why This Is Internship-Oriented
+Start here if you only have a few minutes:
 
-This is not just "train a model and print accuracy". It demonstrates embedded
-AI engineering habits:
+- Full demo index: [`reports/portfolio_summary.md`](reports/portfolio_summary.md)
+- MCU migration story: [`docs/mcu-migration.md`](docs/mcu-migration.md)
+- Interview notes: [`docs/interview-notes.md`](docs/interview-notes.md)
+- Resume bullets: [`docs/resume-bullets.md`](docs/resume-bullets.md)
+- Synthetic evaluation: [`reports/evaluation.md`](reports/evaluation.md)
+- Fixed-point drift: [`reports/fixed_point_report.md`](reports/fixed_point_report.md)
+- MCU resource budget: [`reports/mcu_resource_budget.md`](reports/mcu_resource_budget.md)
+- PHM2008/C-MAPSS harder sample: [`reports/phm2008_comparison.md`](reports/phm2008_comparison.md)
 
-- real-time windowed signal processing
-- RTOS-style stage separation: sensor, feature, inference, communication
-- feature extraction under memory/compute constraints
-- normal-only anomaly detection for maintenance scenarios
-- portable JSON model serialization
-- telemetry, logging, and gateway visualization
-- evaluation metrics, latency metrics, and model-footprint reporting
-- a C feature-extraction prototype for MCU migration
+Current generated snapshot:
 
-## Current Demo Results
+| Area | Result | Why It Matters |
+|---|---:|---|
+| Synthetic detector | F1 0.9831, accuracy 0.9750 | End-to-end signal -> feature -> anomaly pipeline works |
+| CWRU bearing data | F1 1.0000 for centroid | Useful sanity check, but close to a known ceiling |
+| PHM2008/C-MAPSS sample | F1 0.9600, FPR 0.2727 | Harder gradual degradation story than CWRU |
+| Fixed-point simulation | 0 decision mismatches | Q-format path looks feasible before MCU port |
+| C inference | Float + Q24.8 parity tests | Firmware-facing centroid paths are covered |
 
-Generated with:
+![Portfolio pipeline](reports/figures/portfolio_pipeline.png)
 
-```powershell
-python scripts/train_model.py --out artifacts/model.json --windows 120
-python scripts/evaluate_model.py --model artifacts/model.json --windows-per-state 40
-```
-
-| Metric | Value |
-|---|---:|
-| Accuracy | 0.9750 |
-| Precision | 1.0000 |
-| Recall | 0.9667 |
-| F1 | 0.9831 |
-| False positive rate | 0.0000 |
-| Model file size | 856 bytes |
-| Feature extraction avg latency | 0.105816 ms |
-| Inference avg latency | 0.005232 ms |
-
-Per-state detection:
-
-| State | Windows | Detected as anomaly | Detection rate |
-|---|---:|---:|---:|
-| normal | 40 | 0 | 0.0000 |
-| imbalance | 40 | 40 | 1.0000 |
-| rubbing | 40 | 36 | 0.9000 |
-| bearing | 40 | 40 | 1.0000 |
-
-Full reports are written to:
-
-```text
-reports/evaluation.json
-reports/evaluation.md
-```
-
-Static figures are generated for README and portfolio use:
-
-```powershell
-python scripts/generate_figures.py
-```
-
-![Synthetic score curve](reports/figures/synthetic_score_curve.png)
-
-![Alarm debounce timeline](reports/figures/alarm_debounce_timeline.png)
-
-## Real-World Validation: CWRU Bearing Dataset
-
-Validating only on simulator output is not credible. The project also runs on
-the [CWRU bearing dataset](https://engineering.case.edu/bearingdatacenter), the
-de-facto reference for condition monitoring research, and compares the
-project's centroid detector against three sklearn baselines on the same
-features and the same windows.
-
-Get the data (pick one):
-
-```powershell
-# Option A: download all 8 canonical files in one shot. Each file gets a
-# 60s timeout and 2 retries. Already-downloaded files are skipped, so
-# re-running after a network blip just resumes the failed ones.
-python scripts/prepare_cwru.py download-all
-
-# Option B: print the file list with URLs and download manually in a browser,
-# then drop them into data/cwru/<label>/.
-python scripts/prepare_cwru.py manifest
-
-# Option C: generate CWRU-shape synthetic .mat files locally so the pipeline
-# is reproducible without waiting on a download. Reports will be flagged
-# "synthetic-cwru-shape" so they cannot be confused with real CWRU numbers.
-python scripts/prepare_cwru.py synthetic
-```
-
-Run the comparison:
-
-```powershell
-python scripts/compare_models.py
-```
-
-Output (real CWRU data, 1024-sample windows @ 12 kHz, 280 normal training
-windows, 832 test windows = 120 normal + 712 faulty across inner/outer/ball
-race faults):
-
-| Model | Accuracy | F1 | Avg latency (ms) | Size (bytes) |
-|---|---:|---:|---:|---:|
-| CentroidAnomalyDetector | 1.0000 | 1.0000 | 0.003 | 641 |
-| IsolationForest | 0.9712 | 0.9829 | 5.005 | 1,227,444 |
-| OneClassSVM | 1.0000 | 1.0000 | 0.062 | 2,600 |
-| LocalOutlierFactor | 0.9988 | 0.9993 | 0.317 | 64,762 |
-| Autoencoder1D (PyTorch) | 1.0000 | 1.0000 | 0.145 | 12,031 |
-
-The autoencoder is also exported to ONNX FP32 (~9.6 KB) and ONNX INT8
-(~11.6 KB, dynamic quantization). These artifacts live in ``artifacts/`` and
-represent what would be deployed to an MCU via ONNX Runtime Micro or converted
-to TFLite for TFLite Micro.
-
-A separate `scripts/quantization_report.py` runs FP32 vs dynamic-INT8 vs
-static-INT8 on the same test set and reports size, latency, and score drift.
-The findings (in `reports/quantization_report.md`) are useful for interview
-discussion: at this model scale (~3 KB of weights), INT8 metadata is a fixed
-overhead that dominates the savings, and static quantization calibrated only
-on normal data inflates scores on anomalies — a failure mode worth recognizing
-before shipping any quantized anomaly detector.
-
-Honest reading of these numbers: CWRU faults are seeded and severe, so RMS,
-kurtosis, and frequency-band energy already separate normal from faulty
-windows by a wide margin. The expected behavior on this dataset is that any
-reasonable detector lands near the ceiling. The interesting comparison is
-therefore deployment cost, not detection accuracy alone.
-
-### Why the centroid detector for embedded deployment
-
-On these features the five detectors are essentially tied on accuracy. The
-relevant axis is cost:
-
-- **Size.** The centroid detector is ~640 bytes of mean/scale/threshold. The
-  autoencoder is ~12 KB (FP32 state dict) or ~9.6 KB as ONNX. The
-  IsolationForest pickle is ~1.2 MB of tree splits, well over the flash budget
-  of typical TinyML targets.
-- **Latency.** Centroid scoring is two subtractions, two multiplies, and one
-  square root per feature. Per-window inference here is ~3 µs versus 0.15 ms
-  for the autoencoder and 5 ms for IsolationForest. On a 160 MHz Cortex-M4
-  the centroid fits comfortably inside a single RTOS tick.
-- **Portability.** The centroid model is a 4-field JSON file. Porting it to C
-  is a 30-line job. The autoencoder needs an inference runtime (ONNX Runtime
-  Micro or TFLite Micro), which adds ~50-100 KB of flash for the runtime
-  itself. Porting an IsolationForest or RBF SVM to bare-metal C is a project
-  of its own.
-- **When to upgrade.** If early-stage faults with subtle spectral shifts
-  become the target, the autoencoder's learned representation will likely
-  outperform the centroid's fixed distance metric. The ONNX INT8 export is
-  ready for that transition.
-
-For a normal-only detector on this feature set, the centroid model is the
-right tradeoff. The numbers above are the evidence, not just the claim.
-
-Reports are written to:
-
-```text
-reports/cwru_comparison.json
-reports/cwru_comparison.md
-```
-
-![CWRU model comparison](reports/figures/cwru_model_comparison.png)
-
-## CSV Replay and Alarm Debounce
-
-The node can replay real or exported sensor samples from CSV. The minimum
-schema is `signal`; optional columns are `timestamp` and `label`.
-
-```powershell
-python scripts/run_simulated_node.py `
-  --source csv `
-  --input data/examples/vibration_demo.csv `
-  --telemetry runs/csv_telemetry.jsonl
-```
-
-Telemetry contains both raw model decisions and debounced device alarms:
-
-- `is_anomaly_raw`: single-window model output
-- `is_alarm`: debounced alarm state
-- `alarm_state`: `normal`, `pending`, `alarm`, or `recovering`
-
-Default debounce policy is 3 consecutive anomaly windows to enter alarm and 5
-consecutive normal windows to recover:
-
-```powershell
-python scripts/run_simulated_node.py --alarm-on-count 3 --alarm-off-count 5
-```
-
-## Fixed-Point / TinyML Simulation
-
-The current C inference path uses float centroid parameters. For MCU planning,
-the project also simulates storing centroid parameters in Q24.8 fixed-point
-format and reports the decision drift:
-
-```powershell
-python scripts/fixed_point_report.py --model artifacts/model.json
-```
-
-Output:
-
-```text
-reports/fixed_point_report.json
-reports/fixed_point_report.md
-```
-
-The report is intentionally separate from ONNX quantization. It answers a lower
-level TinyML question: "Can this centroid detector become a fixed-point C
-routine without changing decisions?"
-
-## Harder Dataset: PHM 2008 / C-MAPSS
-
-PHM 2008 is not a bearing vibration dataset. It is a NASA C-MAPSS aircraft
-engine degradation dataset with multiple operating settings and sensor channels.
-This project treats it as a normal-vs-degradation detection task rather than a
-full RUL prediction task.
-
-Official references:
-
-- [data.gov PHM 2008 Challenge](https://catalog.data.gov/dataset/phm-2008-challenge-d1f2b)
-- [NASA DASHlink C-MAPSS](https://c3.ndc.nasa.gov/dashlink/resources/139/)
-
-Prepare a small PHM-shape sample for local reproducibility:
-
-```powershell
-python scripts/prepare_phm2008.py synthetic --out data/phm2008_sample/train_FD001.txt
-python scripts/compare_phm2008.py --data-root data/phm2008_sample
-```
-
-The synthetic PHM-shape sample is deliberately more overlapping than CWRU. A
-recent local run produced:
-
-```text
-CentroidAnomalyDetector accuracy=0.9362 f1=0.9600
-```
-
-Reports:
-
-```text
-reports/phm2008_comparison.json
-reports/phm2008_comparison.md
-```
-
-## Quick Start
+## Run In 10 Minutes
 
 ```powershell
 cd E:\linux\tinyml-predictive-maintenance
 .\setup.ps1
 
-.\.venv\Scripts\python.exe scripts\train_model.py
-.\.venv\Scripts\python.exe scripts\run_simulated_node.py --duration 4
-.\.venv\Scripts\python.exe scripts\run_simulated_node.py --source csv --input data\examples\vibration_demo.csv --window-size 8
-.\.venv\Scripts\python.exe scripts\evaluate_model.py --windows-per-state 40
-.\.venv\Scripts\python.exe scripts\fixed_point_report.py
+# One command for the presentation-oriented demo. It does not need external data.
+.\.venv\Scripts\python.exe scripts\run_portfolio_demo.py --quick
 ```
 
-Telemetry is written to:
+The demo trains a synthetic model, runs synthetic telemetry, replays CSV sensor
+samples, evaluates metrics, refreshes the fixed-point report, prepares the
+PHM2008-shape sample, generates figures, and writes:
 
 ```text
-runs/telemetry.jsonl
+reports/portfolio_summary.md
+```
+
+Useful individual commands:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_model.py
+.\.venv\Scripts\python.exe scripts\run_simulated_node.py --duration 4
+.\.venv\Scripts\python.exe scripts\run_simulated_node.py --source csv --input data\examples\vibration_demo.csv
+.\.venv\Scripts\python.exe scripts\evaluate_model.py --windows-per-state 40
+.\.venv\Scripts\python.exe scripts\fixed_point_report.py
+.\.venv\Scripts\python.exe scripts\mcu_resource_report.py
+.\.venv\Scripts\python.exe scripts\generate_figures.py
 ```
 
 Optional dashboard:
@@ -286,28 +82,115 @@ Optional dashboard:
 .\.venv\Scripts\streamlit.exe run gateway\app.py
 ```
 
-## Configuration
+## Project Highlights
 
-Default project settings live in:
+- RTOS-style staged pipeline: sensor/replay, feature extraction, inference,
+  alarm debounce, telemetry.
+- Generic CSV replay with minimum schema `signal`; optional `timestamp` and
+  `label` columns.
+- Telemetry keeps both raw model decisions and debounced alarm state:
+  `is_anomaly_raw`, `is_alarm`, and `alarm_state`.
+- Tiny centroid detector for embedded deployment, plus sklearn/PyTorch/ONNX
+  comparison paths for algorithm discussion.
+- Float C inference and Q24.8 integer C inference with parity tests.
+- MCU resource-budget report for model bytes, buffer bytes, telemetry estimate,
+  and per-window inference work.
+- Static portfolio figures generated from reports, with Pillow fallback when
+  matplotlib is not available.
 
-```text
-configs/default.json
+Generated figures:
+
+![Synthetic score curve](reports/figures/synthetic_score_curve.png)
+
+![Alarm debounce timeline](reports/figures/alarm_debounce_timeline.png)
+
+![CWRU model comparison](reports/figures/cwru_model_comparison.png)
+
+![Quantization size and latency](reports/figures/quantization_size_latency.png)
+
+![PHM2008 comparison](reports/figures/phm2008_comparison.png)
+
+## CSV Replay And Alarm Debounce
+
+The replay loader supports exported sensor data in this minimum format:
+
+```csv
+timestamp,signal,label
+0.0000,0.012,normal
+0.0006,0.018,normal
 ```
 
-Scripts load this config by default and allow command-line overrides. Example:
+Only `signal` is required. If `label` is missing, telemetry uses
+`true_state="unknown"`.
 
 ```powershell
-.\.venv\Scripts\python.exe scripts\train_model.py --config configs/default.json --windows 800
+.\.venv\Scripts\python.exe scripts\run_simulated_node.py `
+  --source csv `
+  --input data\examples\vibration_demo.csv `
+  --telemetry runs\csv_telemetry.jsonl
 ```
 
-Important fields:
+Default debounce policy:
 
-- `sample_rate_hz`: simulated sensor sampling rate
-- `window_size`: samples per inference window
-- `train_windows`: normal windows used for training
-- `states`: states used by evaluation
-- `model_path`: JSON model output
-- `telemetry_path`: JSONL node output
+- 3 consecutive anomaly windows enter alarm.
+- 5 consecutive normal windows recover from alarm.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_simulated_node.py --alarm-on-count 3 --alarm-off-count 5
+```
+
+## Real-World And Harder Dataset Checks
+
+CWRU bearing data is the classic condition-monitoring benchmark. This project
+uses it as a real-data sanity check, but the README is intentionally cautious:
+CWRU seeded faults often separate very cleanly, so F1 near 1.0 should not be
+oversold as proof of industrial robustness.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\prepare_cwru.py manifest
+.\.venv\Scripts\python.exe scripts\prepare_cwru.py synthetic
+.\.venv\Scripts\python.exe scripts\compare_models.py
+```
+
+PHM 2008 / NASA C-MAPSS is an aircraft-engine degradation dataset, not a
+bearing vibration dataset. The project frames it as anomaly/degradation
+detection rather than full RUL prediction, keeping the scope appropriate for an
+internship portfolio.
+
+Official references:
+
+- [data.gov PHM 2008 Challenge](https://catalog.data.gov/dataset/phm-2008-challenge-d1f2b)
+- [NASA DASHlink C-MAPSS](https://c3.ndc.nasa.gov/dashlink/resources/139/)
+
+Offline reproducible sample:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\prepare_phm2008.py synthetic --out data\phm2008_sample\train_FD001.txt --units 12 --cycles 180 --sensors 6 --seed 2027
+.\.venv\Scripts\python.exe scripts\compare_phm2008.py --data-root data\phm2008_sample
+```
+
+## Quantization And TinyML Notes
+
+There are two separate deployment stories:
+
+- `scripts/quantization_report.py` compares PyTorch FP32, ONNX FP32, and ONNX
+  INT8 autoencoder exports. This is the heavier learned-model path.
+- `scripts/fixed_point_report.py` simulates Q24.8 centroid parameters and the
+  integer input path, then reports score drift and anomaly-decision mismatches.
+  This is the lightweight MCU path.
+- `scripts/mcu_resource_report.py` estimates sample buffers, feature buffers,
+  model bytes, telemetry payload size, and per-window inference work.
+
+Current firmware status:
+
+- Implemented: float centroid inference in `firmware/inference.c`.
+- Implemented: Q24.8 integer centroid inference in `firmware/inference_fixed.c`.
+- Tested: Python/C parity through `tests/test_c_inference_parity.py`.
+- Tested: Python/C fixed-point parity through `tests/test_c_fixed_inference_parity.py`.
+- Next: direct Q-format feature extraction and CMSIS-DSP FFT feature extraction.
+
+See [`docs/mcu-migration.md`](docs/mcu-migration.md) for the RTOS task split
+and firmware roadmap.
 
 ## Project Layout
 
@@ -320,91 +203,54 @@ src/tpm/
   features.py               MCU-friendly feature extraction
   model.py                  tiny centroid anomaly detector
   baselines.py              sklearn baselines with a shared predict() contract
-  autoencoder.py            1D autoencoder (PyTorch) with ONNX INT8 export
+  autoencoder.py            1D autoencoder with optional ONNX INT8 export
   alarm.py                  raw anomaly -> debounced alarm state
   fixed_point.py            Q24.8 centroid parameter simulation
-  evaluation.py             metrics and report rendering
+  portfolio.py              portfolio summary rendering
   rtos_sim.py               synchronous RTOS-style node pipeline
-  telemetry.py              JSONL telemetry sink
   datasets/
-    cwru.py                 CWRU bearing dataset loader
     csv_replay.py           generic timestamp/signal/label CSV replay
+    cwru.py                 CWRU bearing dataset loader
     phm2008.py              PHM08/C-MAPSS multivariate degradation loader
 scripts/
+  run_portfolio_demo.py     one-command portfolio demo
   train_model.py            train normal-only detector
   run_simulated_node.py     run sensor -> feature -> inference -> telemetry
   evaluate_model.py         generate JSON/Markdown evaluation reports
-  prepare_cwru.py           download/synthesize CWRU files into data/cwru/
-  compare_models.py         centroid vs sklearn vs autoencoder on CWRU features
-  quantization_report.py    FP32 / INT8-dynamic / INT8-static comparison
-  fixed_point_report.py     float centroid vs Q-format simulation
   generate_figures.py       static PNG plots for README/reports
+  fixed_point_report.py     float centroid vs Q-format simulation
+  mcu_resource_report.py    MCU model/buffer/telemetry resource budget
   prepare_phm2008.py        manifest/synthetic PHM08/C-MAPSS sample generator
   compare_phm2008.py        centroid/baseline comparison on PHM08 windows
-  export_model_to_c.py      generate firmware/model_params.h from JSON model
+  compare_models.py         centroid vs baselines on CWRU features
 gateway/
   app.py                    Streamlit gateway dashboard
 firmware/
-  feature_extract.c/.h      portable C time-domain feature prototype
-  inference.c/.h            portable C centroid inference for MCU deployment
-  test_inference.c          host-side harness for Python-C parity testing
-  model_params.h            generated trained-model constants (auto-built)
+  feature_extract.c/.h      portable C feature prototype
+  inference.c/.h            portable C centroid inference
+  inference_fixed.c/.h      Q24.8 integer centroid inference
 tests/
-  test_*.py                 unit and smoke tests
+  test_*.py                 unit, replay, fixed-point, dataset, and parity tests
 ```
 
 ## Testing
 
 On this Windows environment, disabling third-party pytest plugin autoload avoids
-unrelated network/asyncio plugins from interfering with simple unit tests:
+unrelated plugin imports from interfering with local unit tests:
 
 ```powershell
 cd E:\linux\tinyml-predictive-maintenance
 $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
-.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Expected result:
+Expected local result after the portfolio polish:
 
 ```text
-20 passed, 3 skipped
+23 passed, 2 skipped
 ```
 
-Skipped tests are optional-stack checks: local Windows environments without a C
-compiler, or with broken `torch`/`sklearn` imports due to system
-`asyncio/_overlapped` issues, skip those modules cleanly. Linux CI exercises the
-full path.
-
-## Hardware Migration Story
-
-When hardware becomes available, replace only the synthetic sensor source:
-
-```text
-signal_sim.py -> I2C/SPI accelerometer driver
-```
-
-Most of the application should stay stable:
-
-- feature vector contract
-- model thresholding
-- telemetry schema
-- evaluation scripts
-- gateway/dashboard
-- EdgeBench latency/model-footprint reports
-
-The `firmware/` folder now contains both halves of the inference pipeline in
-portable C:
-
-1. **`feature_extract.c`** — time-domain features (mean, RMS, std, peak-to-peak,
-   crest factor) ready for an RTOS task or bare-metal loop.
-2. **`inference.c`** — centroid anomaly inference (per-feature z-score, L2
-   distance, threshold). Numerical parity with the Python implementation is
-   verified on every CI run by `tests/test_c_inference_parity.py`.
-
-Trained model parameters are exported from JSON to a compile-time C header by
-`scripts/export_model_to_c.py`. The whole model on the MCU side fits in
-~84 bytes of flash for the 10-feature centroid detector.
-
-FFT band-power features can be added later with CMSIS-DSP on Cortex-M, or with
-a target-specific DSP library. The autoencoder path uses ONNX Runtime Micro or
-TFLite Micro and is ready to deploy via the artifacts in `artifacts/`.
+Skipped tests are optional-stack checks for local Windows environments with
+broken `torch`/`sklearn` imports due to system `asyncio/_overlapped` issues.
+The C parity tests run locally when `E:\tools\tcc\tcc` or another C compiler is
+on `PATH`.

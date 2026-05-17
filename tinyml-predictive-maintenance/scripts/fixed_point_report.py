@@ -36,6 +36,7 @@ def _render_markdown(report: dict) -> str:
 
     q = report["quantization"]
     err = report["score_error"]
+    int_err = report.get("integer_path_score_error", {})
     return "\n".join(
         [
             "# Fixed-Point Centroid Report",
@@ -44,8 +45,11 @@ def _render_markdown(report: dict) -> str:
             f"- Float parameter footprint: `{report['float_model_bytes']}` bytes",
             f"- Fixed-point parameter footprint: `{report['fixed_point_bytes']}` bytes",
             f"- Decision mismatches: `{report['decision_mismatches']}`",
+            f"- Integer-path decision mismatches: `{report.get('integer_path_decision_mismatches')}`",
             f"- Mean absolute score error: `{err['mean_abs']:.6e}`",
             f"- Max absolute score error: `{err['max_abs']:.6e}`",
+            f"- Integer-path mean absolute score error: `{int_err.get('mean_abs', 0.0):.6e}`",
+            f"- Integer-path max absolute score error: `{int_err.get('max_abs', 0.0):.6e}`",
             "",
             "## Quantization Parameters",
             "",
@@ -56,8 +60,9 @@ def _render_markdown(report: dict) -> str:
             f"| threshold_q | {q['threshold_q']} |",
             "",
             "This report simulates storing centroid parameters in Q24.8 int32 format.",
-            "The current firmware path still uses float inference; fixed-point",
-            "is the next MCU optimization step after functional parity.",
+            "The parameter-only path measures quantized model drift while keeping",
+            "float feature inputs. The integer path also quantizes feature inputs",
+            "and mirrors the fixed-point C implementation in `firmware/`.",
             "",
         ]
     )

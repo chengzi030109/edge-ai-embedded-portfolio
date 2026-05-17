@@ -3,9 +3,14 @@
   "fixed_point_bytes": 84,
   "n_vectors": 80,
   "decision_mismatches": 0,
+  "integer_path_decision_mismatches": 0,
   "score_error": {
     "mean_abs": 0.1406357169151306,
     "max_abs": 0.303466796875
+  },
+  "integer_path_score_error": {
+    "mean_abs": 0.30370343178510667,
+    "max_abs": 0.9752998352050781
   },
   "quantization": {
     "q_fractional_bits": 8,

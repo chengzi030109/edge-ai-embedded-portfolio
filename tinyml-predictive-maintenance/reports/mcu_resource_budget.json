@@ -1,0 +1,47 @@
+{
+  "model_path": "artifacts\\model.json",
+  "sample_rate_hz": 1600,
+  "window_size": 256,
+  "n_features": 10,
+  "feature_names": [
+    "rms",
+    "std",
+    "peak_to_peak",
+    "crest_factor",
+    "kurtosis",
+    "dominant_freq_hz",
+    "spectral_centroid_hz",
+    "low_band_power",
+    "mid_band_power",
+    "high_band_power"
+  ],
+  "buffers": {
+    "sample_buffer_i16_bytes": 512,
+    "feature_vector_float_bytes": 40,
+    "feature_vector_q24_8_bytes": 40,
+    "compact_telemetry_estimate_bytes": 20
+  },
+  "model_parameters": {
+    "float_bytes": 84,
+    "fixed_q24_8_bytes": 84,
+    "q_fractional_bits": 8,
+    "threshold_q": 1559
+  },
+  "inference_work": {
+    "ops_per_feature": {
+      "subtract": 1,
+      "multiply": 2,
+      "shift": 1,
+      "accumulate": 1
+    },
+    "integer_sqrt_per_window": 1,
+    "threshold_compare_per_window": 1,
+    "notes": "FFT/statistical feature extraction dominates compute; centroid scoring is tiny."
+  },
+  "fixed_point_validation": {
+    "decision_mismatches": 0,
+    "integer_path_decision_mismatches": 0,
+    "mean_abs_score_error": 0.1406357169151306,
+    "integer_path_mean_abs_score_error": 0.30370343178510667
+  }
+}

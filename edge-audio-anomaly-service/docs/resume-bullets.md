@@ -11,6 +11,8 @@
   to reduce one-window false alarm behavior in stream monitoring.
 - Added a pluggable inference backend with optional ONNX Runtime export and
   latency/parity reporting for edge deployment.
+- Implemented FastAPI service endpoints for WAV upload, health checks, metrics,
+  local event buffering, and upload/ack state tracking.
 - Designed the service so microphone/UDP input and ONNX Runtime inference can
   be added without changing the feature/report contract.
 - Added SQLite event buffering, anomaly clip extraction, synthetic

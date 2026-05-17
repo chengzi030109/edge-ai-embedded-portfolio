@@ -8,12 +8,16 @@ WorkingDirectory=/opt/edge-audio-anomaly-service
 # it into a wheel. A production image can replace this with an installed venv.
 Environment=PYTHONPATH=/opt/edge-audio-anomaly-service/src
 Environment=PYTHONUNBUFFERED=1
+StateDirectory=edge-audio-anomaly-service
+LogsDirectory=edge-audio-anomaly-service
 # The API is optional for the local demo. On an embedded Linux target install
 # the [api] dependencies, run scripts/run_audio_demo.py once to create the
 # initial model, then let uvicorn host the service endpoint.
 ExecStart=/usr/bin/python3 -m uvicorn edge_audio.api:create_app --factory --host 0.0.0.0 --port 8080
 Restart=on-failure
 RestartSec=2
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from edge_audio.config import load_config
-from edge_audio.storage import connect, list_events, summary
+from edge_audio.storage import connect, init_db, list_events, summary
 
 
 def parse_args() -> argparse.Namespace:
@@ -37,6 +37,7 @@ def main() -> None:
     args = parse_args()
     cfg = load_config(args.config)
     conn = connect(cfg.database_path)
+    init_db(conn)
     stats = summary(conn)
     events = list_events(conn, limit=args.limit)
 
@@ -51,6 +52,7 @@ def main() -> None:
         f"events={stats['event_count']} "
         f"raw_anomalies={stats['raw_anomaly_count']} "
         f"alarms={stats['alarm_count']} "
+        f"pending_upload={stats['pending_upload_count']} "
         f"feature_ms_avg={stats['feature_ms_avg']:.4f} "
         f"inference_ms_avg={stats['inference_ms_avg']:.4f}"
     )

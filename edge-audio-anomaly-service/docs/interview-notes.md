@@ -20,6 +20,8 @@ Key talking points:
 - The inference backend is abstracted: `centroid` is the default, and ONNX
   Runtime can be selected later without changing the stream/storage/API layers.
 - SQLite stores window-level events as an edge buffer.
+- The API exposes `/healthz` and `/metrics`, plus upload and ack endpoints, so
+  it behaves like a small long-running Linux service instead of only a script.
 - Anomaly clips are saved for later inspection.
 - ONNX Runtime can be plugged in later without changing input/reports.
 - systemd deployment shows how it would run on a Linux board.
@@ -47,3 +49,7 @@ runtime is isolated behind a stable `predict(features)` contract.
 If asked about dataset credibility, be explicit: the built-in sample is a
 hardware-free fixture that validates the loader and report path; final accuracy
 claims should come from real MIMII or ToyADMOS downloads.
+
+If asked about offline operation, explain the `uploaded` and `ack` columns:
+events are durable in SQLite first, then the service can mark them uploaded only
+after network transfer and cloud acknowledgement succeed.

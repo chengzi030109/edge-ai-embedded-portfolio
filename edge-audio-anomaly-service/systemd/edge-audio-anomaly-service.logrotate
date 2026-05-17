@@ -1,0 +1,8 @@
+/var/log/edge-audio-anomaly-service/*.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    copytruncate
+}

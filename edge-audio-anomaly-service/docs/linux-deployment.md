@@ -23,6 +23,8 @@ vectors become anomaly scores, and anomaly scores become events in SQLite.
   can start with the Python centroid backend and later switch to ONNX Runtime.
 - `scripts/query_audio_events.py` is the SSH-friendly operator tool for checking
   the local event buffer without starting the API server.
+- `scripts/api_smoke_test.py` starts the local API, uploads a WAV, checks
+  metrics, and marks one event acknowledged.
 
 ## Board Input Boundary
 
@@ -70,6 +72,17 @@ python3 scripts/query_audio_events.py --limit 20
 python3 scripts/query_audio_events.py --json --limit 5
 ```
 
+Health and observability endpoints:
+
+```bash
+curl http://127.0.0.1:8080/healthz
+curl http://127.0.0.1:8080/metrics
+```
+
+The metrics endpoint emits simple Prometheus-style text counters for total
+events, raw anomaly windows, debounced alarm windows, pending upload events, and
+average inference latency.
+
 Recommended production split:
 
 | Worker | Responsibility |
@@ -79,7 +92,29 @@ Recommended production split:
 | Inference worker | Runs centroid or ONNX Runtime scoring. |
 | Alarm worker | Applies consecutive-window debounce and emits stable alarm state. |
 | Storage worker | Writes window events and anomaly snippets locally. |
-| API/upload worker | Serves recent events or uploads batches when the network is healthy. |
+| API/upload worker | Accepts WAV uploads, serves recent events, and marks uploaded/acknowledged batches. |
+
+## Offline Upload Simulation
+
+SQLite rows include two service-level flags:
+
+- `uploaded`: the edge service has sent or staged the event for cloud upload.
+- `ack`: the remote side acknowledged the event batch.
+
+The API endpoint `POST /api/v1/audio/events/ack` updates those flags for chosen
+event IDs. This models the common embedded Linux pattern where the board buffers
+locally during network loss and marks rows only after a later upload succeeds.
+
+## Logging
+
+The systemd unit writes to journald by default:
+
+```bash
+sudo journalctl -u edge-audio-anomaly-service -f
+```
+
+`systemd/edge-audio-anomaly-service.logrotate` is provided for deployments that
+also mirror logs into `/var/log/edge-audio-anomaly-service/*.log`.
 
 ## Next Upgrade Path
 

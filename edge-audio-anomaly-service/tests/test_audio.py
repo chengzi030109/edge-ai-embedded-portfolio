@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from edge_audio.alarm import AlarmDebouncer
-from edge_audio.api import ROUTES
+import pytest
+
+from edge_audio.api import ROUTES, create_app
 from edge_audio.backends import load_backend
 from edge_audio.config import load_config
 from edge_audio.datasets import load_public_audio_rows, split_train_eval_rows, summarize_rows
@@ -10,7 +12,7 @@ from edge_audio.evaluation import collect_labeled_window_vectors, evaluate_predi
 from edge_audio.features import load_feature_rows, read_wav
 from edge_audio.model import AudioCentroidModel
 from edge_audio.report import render_markdown
-from edge_audio.storage import connect, init_db, insert_events, list_events, summary
+from edge_audio.storage import connect, init_db, insert_events, list_events, mark_events_uploaded, summary
 from edge_audio.streaming import analyze_dataset_windows, analyze_wav_windows, collect_window_feature_vectors
 from edge_audio.synth import generate_demo_wavs, generate_public_audio_sample
 
@@ -163,6 +165,12 @@ def test_windowed_analysis_and_storage(tmp_path):
     stored = list_events(conn, limit=1)[0]
     assert isinstance(stored["is_alarm"], bool)
     assert isinstance(stored["features"], dict)
+    assert stored["uploaded"] is False
+    assert stored["ack"] is False
+    assert mark_events_uploaded(conn, [stored["id"]], ack=True) == 1
+    updated = list_events(conn, limit=1)[0]
+    assert updated["uploaded"] is True
+    assert updated["ack"] is True
 
 
 def test_dataset_window_analysis_saves_anomaly_clips(tmp_path):
@@ -184,3 +192,45 @@ def test_dataset_window_analysis_saves_anomaly_clips(tmp_path):
 def test_api_route_contract():
     assert "POST /api/v1/audio/analyze" in ROUTES
     assert "POST /api/v1/audio/analyze-windowed" in ROUTES
+    assert "POST /api/v1/audio/upload" in ROUTES
+    assert "POST /api/v1/audio/events/ack" in ROUTES
+    assert "GET /healthz" in ROUTES
+    assert "GET /metrics" in ROUTES
+
+
+def test_api_health_metrics_and_upload(tmp_path):
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    wav_root = tmp_path / "wav"
+    generate_demo_wavs(wav_root, sample_rate_hz=8000, clip_seconds=0.5)
+    rows = load_feature_rows(wav_root)
+    model_path = tmp_path / "audio_model.json"
+    model = AudioCentroidModel.train(collect_window_feature_vectors(rows, 0.1, 0.05))
+    model.save(model_path)
+    app = create_app(model_path=model_path, database_path=tmp_path / "audio.db")
+    client = TestClient(app)
+
+    health = client.get("/healthz")
+    assert health.status_code == 200
+    assert health.json()["status"] == "ok"
+
+    wav_path = rows[0]["path"]
+    with open(wav_path, "rb") as fh:
+        uploaded = client.post(
+            "/api/v1/audio/upload",
+            files={"file": ("sample.wav", fh, "audio/wav")},
+            data={"label": "normal", "window_seconds": "0.1", "hop_seconds": "0.05"},
+        )
+    assert uploaded.status_code == 200
+    payload = uploaded.json()
+    assert payload["count"] > 0
+
+    metrics = client.get("/metrics")
+    assert metrics.status_code == 200
+    assert "edge_audio_events_total" in metrics.text
+
+    event_id = client.get("/api/v1/audio/events?limit=1").json()[0]["id"]
+    ack = client.post("/api/v1/audio/events/ack", json={"event_ids": [event_id], "ack": True})
+    assert ack.status_code == 200
+    assert ack.json()["updated"] == 1

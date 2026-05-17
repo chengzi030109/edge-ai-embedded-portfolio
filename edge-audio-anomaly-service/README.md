@@ -26,6 +26,7 @@ cd E:\linux\edge-audio-anomaly-service
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\query_audio_events.py --limit 5
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\evaluate_public_audio_dataset.py
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\benchmark_model_backends.py
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\api_smoke_test.py
 $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe -m pytest -q
 ```
@@ -65,8 +66,12 @@ The demo writes `reports/audio_anomaly_report.md` and
 
 - `POST /api/v1/audio/analyze`
 - `POST /api/v1/audio/analyze-windowed`
+- `POST /api/v1/audio/upload`
+- `POST /api/v1/audio/events/ack`
 - `GET /api/v1/audio/events`
 - `GET /api/v1/audio/summary`
+- `GET /healthz`
+- `GET /metrics`
 
 FastAPI is optional for the first local demo. When installed, the API persists
 events to SQLite, so HTTP analysis behaves like a small edge service instead of
@@ -77,6 +82,17 @@ Example service command:
 ```powershell
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe -m uvicorn edge_audio.api:create_app --factory --host 127.0.0.1 --port 8080
 ```
+
+API smoke test:
+
+```powershell
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe -m pip install -e .[api]
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\api_smoke_test.py
+```
+
+The smoke test starts uvicorn, checks `/healthz`, uploads a WAV to
+`/api/v1/audio/upload`, reads `/metrics`, and marks one event acknowledged via
+`/api/v1/audio/events/ack`.
 
 ## Model Deployment Path
 
@@ -122,6 +138,8 @@ See `docs/real-datasets.md` for dataset links and folder conventions.
 - ONNX Runtime replaces only the inference backend; capture, feature extraction,
   alarm debounce, SQLite storage, and reports stay unchanged.
 - SQLite stores window events locally when the network is unavailable.
+- `uploaded` and `ack` fields simulate offline buffering and cloud
+  acknowledgement.
 - Anomaly clips are saved for later inspection or upload.
 - `systemd/edge-audio-anomaly-service.service` shows the deployment shape.
 - `docs/linux-deployment.md` explains the board-side input boundary, resource

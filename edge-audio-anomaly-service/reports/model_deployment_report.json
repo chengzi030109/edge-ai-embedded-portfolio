@@ -6,12 +6,12 @@
   "centroid": {
     "backend": "centroid",
     "model_path": "audio_model.json",
-    "latency_ms_avg": 0.0026968755264533684
+    "latency_ms_avg": 0.0027406249500927515
   },
   "onnx": {
     "backend": "onnx",
     "model_path": "audio_model.onnx",
-    "latency_ms_avg": 0.01753281230776338
+    "latency_ms_avg": 0.020204687643854413
   },
   "score_error_mean": 1.5459954738616943e-07,
   "score_error_max": 3.814697265625e-06,

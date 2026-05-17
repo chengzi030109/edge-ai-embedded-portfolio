@@ -26,7 +26,9 @@ CREATE TABLE IF NOT EXISTS audio_events (
   feature_ms REAL NOT NULL,
   inference_ms REAL NOT NULL,
   clip_path TEXT NOT NULL,
-  features_json TEXT NOT NULL
+  features_json TEXT NOT NULL,
+  uploaded INTEGER NOT NULL DEFAULT 0,
+  ack INTEGER NOT NULL DEFAULT 0
 );
 """
 
@@ -41,7 +43,17 @@ def connect(path: str | Path) -> sqlite3.Connection:
 
 def init_db(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA)
+    _ensure_column(conn, "uploaded", "INTEGER NOT NULL DEFAULT 0")
+    _ensure_column(conn, "ack", "INTEGER NOT NULL DEFAULT 0")
     conn.commit()
+
+
+def _ensure_column(conn: sqlite3.Connection, name: str, ddl: str) -> None:
+    """Add a column when an older SQLite database was created before it existed."""
+
+    columns = {row["name"] for row in conn.execute("PRAGMA table_info(audio_events)").fetchall()}
+    if name not in columns:
+        conn.execute(f"ALTER TABLE audio_events ADD COLUMN {name} {ddl}")
 
 
 def insert_events(conn: sqlite3.Connection, events: list[dict]) -> None:
@@ -53,8 +65,8 @@ def insert_events(conn: sqlite3.Connection, events: list[dict]) -> None:
           source, label, window_index, start_s, end_s, score, threshold,
           is_anomaly_raw, is_anomaly, is_alarm, alarm_state,
           alarm_bad_streak, alarm_good_streak, feature_ms, inference_ms,
-          clip_path, features_json
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          clip_path, features_json, uploaded, ack
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         [
             (
@@ -75,6 +87,8 @@ def insert_events(conn: sqlite3.Connection, events: list[dict]) -> None:
                 float(event["inference_ms"]),
                 event.get("clip_path", ""),
                 json.dumps(event.get("features", {}), ensure_ascii=True),
+                int(event.get("uploaded", False)),
+                int(event.get("ack", False)),
             )
             for event in events
         ],
@@ -89,6 +103,8 @@ def _row_to_event(row: sqlite3.Row) -> dict:
     event["is_anomaly_raw"] = bool(event["is_anomaly_raw"])
     event["is_anomaly"] = bool(event["is_anomaly"])
     event["is_alarm"] = bool(event["is_alarm"])
+    event["uploaded"] = bool(event.get("uploaded", 0))
+    event["ack"] = bool(event.get("ack", 0))
     event["features"] = json.loads(event.pop("features_json") or "{}")
     return event
 
@@ -98,12 +114,28 @@ def list_events(conn: sqlite3.Connection, limit: int = 50) -> list[dict]:
     return [_row_to_event(row) for row in rows]
 
 
+def mark_events_uploaded(conn: sqlite3.Connection, event_ids: list[int], *, ack: bool = False) -> int:
+    """Mark selected events as uploaded, and optionally cloud-acknowledged."""
+
+    if not event_ids:
+        return 0
+    placeholders = ",".join("?" for _ in event_ids)
+    cursor = conn.execute(
+        f"UPDATE audio_events SET uploaded = 1, ack = ? WHERE id IN ({placeholders})",
+        [int(ack), *[int(event_id) for event_id in event_ids]],
+    )
+    conn.commit()
+    return int(cursor.rowcount)
+
+
 def summary(conn: sqlite3.Connection) -> dict:
     row = conn.execute(
         """
         SELECT COUNT(*) AS n,
                SUM(is_anomaly_raw) AS raw_anomalies,
                SUM(is_alarm) AS alarms,
+               SUM(uploaded) AS uploaded,
+               SUM(ack) AS acked,
                AVG(feature_ms) AS feature_ms,
                AVG(inference_ms) AS inference_ms
         FROM audio_events
@@ -114,6 +146,9 @@ def summary(conn: sqlite3.Connection) -> dict:
         "raw_anomaly_count": int(row["raw_anomalies"] or 0),
         "alarm_count": int(row["alarms"] or 0),
         "anomaly_count": int(row["raw_anomalies"] or 0),
+        "uploaded_count": int(row["uploaded"] or 0),
+        "ack_count": int(row["acked"] or 0),
+        "pending_upload_count": int((row["n"] or 0) - (row["uploaded"] or 0)),
         "feature_ms_avg": float(row["feature_ms"] or 0.0),
         "inference_ms_avg": float(row["inference_ms"] or 0.0),
     }

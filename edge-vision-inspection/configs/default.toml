@@ -1,0 +1,8 @@
+[vision]
+image_size = 160
+data_dir = "data/images"
+model_path = "artifacts/vision_model.json"
+report_path = "reports/vision_inspection_report.md"
+annotated_dir = "reports/annotated"
+figure_path = "reports/vision_score_distribution.png"
+

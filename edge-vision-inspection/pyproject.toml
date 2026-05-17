@@ -1,0 +1,13 @@
+[project]
+name = "edge-vision-inspection"
+version = "0.1.0"
+description = "Embedded Linux edge vision inspection demo"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "pillow>=10.0"]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110", "uvicorn>=0.27"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

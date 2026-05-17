@@ -29,5 +29,5 @@
 
 | Stage | Avg ms | P95 ms |
 |---|---:|---:|
-| Feature extraction | 0.087008 | 0.108850 |
-| Inference | 0.004657 | 0.008305 |
+| Feature extraction | 0.083664 | 0.075610 |
+| Inference | 0.004201 | 0.005305 |

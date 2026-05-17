@@ -1,0 +1,13 @@
+[project]
+name = "edge-ai-maintenance-gateway"
+version = "0.1.0"
+description = "Embedded Linux edge AI maintenance gateway demo"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110", "uvicorn>=0.27"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

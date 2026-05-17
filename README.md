@@ -1,6 +1,6 @@
 # AI + Embedded Internship Portfolio
 
-This workspace contains two hardware-free projects designed for AI + embedded
+This workspace contains hardware-free projects designed for AI + embedded
 internship applications.
 
 ## Projects
@@ -20,16 +20,41 @@ Path: `edgebench`
 A lightweight benchmark CLI for edge AI inference. It measures latency,
 throughput, model footprint, and generates reproducible reports.
 
+### 3. Edge AI Maintenance Gateway
+
+Path: `edge-ai-maintenance-gateway`
+
+An embedded Linux application-layer gateway. It replays TinyML telemetry,
+buffers it in SQLite, exposes API route contracts, and generates a local
+dashboard/report.
+
+### 4. Edge Audio Anomaly Service
+
+Path: `edge-audio-anomaly-service`
+
+An industrial audio anomaly service. It generates synthetic WAV clips, extracts
+audio features, runs lightweight anomaly detection, and writes reports.
+
+### 5. Edge Vision Inspection
+
+Path: `edge-vision-inspection`
+
+An edge visual inspection app. It generates synthetic defect images, extracts
+lightweight image features, detects defects, and saves annotated outputs.
+
 ## Suggested Resume Positioning
 
-Use the first project as the main application project and the second as a
-supporting engineering tool:
+Use the first project as the MCU/TinyML anchor, the three edge projects as
+embedded Linux application-layer demos, and EdgeBench as a supporting
+measurement tool:
 
 ```text
 TinyML Predictive Maintenance System
 ├── simulated RTOS node
-├── quantized-style anomaly inference
-├── embedded Linux gateway dashboard
+├── float + Q24.8 C inference parity
+├── Edge AI Maintenance Gateway
+├── Edge Audio Anomaly Service
+├── Edge Vision Inspection
 └── EdgeBench latency/model-footprint reports
 ```
 

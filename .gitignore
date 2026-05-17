@@ -10,6 +10,12 @@ runs/
 **/data/phm2008/
 **/data/phm2008_raw/
 **/data/phm2008*/raw/
+edge-ai-maintenance-gateway/data/
+edge-audio-anomaly-service/data/
+edge-vision-inspection/data/
+edge-ai-maintenance-gateway/artifacts/
+edge-audio-anomaly-service/artifacts/
+edge-vision-inspection/artifacts/
 *.exe
 *.obj
 *.o

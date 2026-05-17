@@ -1,0 +1,12 @@
+[Unit]
+Description=Edge Vision Inspection Demo
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/edge-vision-inspection
+ExecStart=/usr/bin/python3 scripts/run_vision_demo.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

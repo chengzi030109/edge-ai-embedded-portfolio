@@ -12,4 +12,4 @@ bearing fault with a large spectral separation.
 
 | Model | Accuracy | Precision | Recall | F1 | FPR | Avg latency (ms) | Size (bytes) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CentroidAnomalyDetector | 0.9362 | 0.9231 | 1.0000 | 0.9600 | 0.2727 | 0.0034 | 260 |
+| CentroidAnomalyDetector | 0.9362 | 0.9231 | 1.0000 | 0.9600 | 0.2727 | 0.0033 | 260 |

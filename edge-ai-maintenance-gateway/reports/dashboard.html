@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Edge AI Maintenance Gateway</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 32px; color: #1f2933; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border-bottom: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+    svg { background: #f8fafc; border: 1px solid #d9e2ec; }
+  </style>
+</head>
+<body>
+  <h1>Edge AI Maintenance Gateway</h1>
+  <p>Local embedded-Linux style dashboard generated from SQLite telemetry.</p>
+  <div class="grid">
+    <section>
+      <h2>Score Timeline</h2>
+      <svg width="620" height="220">
+        <polyline points="20.0,176.8 43.3,178.3 66.7,177.9 90.0,177.6 113.3,177.2 136.7,176.3 160.0,178.6 183.3,177.9 206.7,176.7 230.0,177.5 253.3,177.0 276.7,178.8 300.0,132.8 323.3,130.6 346.7,130.4 370.0,132.2 393.3,129.2 416.7,56.2 440.0,56.3 463.3,40.0 486.7,160.6 510.0,124.8 533.3,127.3 556.7,123.2 580.0,136.9" fill="none" stroke="#2563eb" stroke-width="3" />
+      </svg>
+    </section>
+    <section>
+      <h2>Recent Alarm Events</h2>
+      <ul><li>seq 24: alarm, score 43.23</li>
+<li>seq 23: alarm, score 56.91</li>
+<li>seq 22: alarm, score 52.88</li>
+<li>seq 21: alarm, score 55.38</li>
+<li>seq 20: alarm, score 19.44</li>
+<li>seq 19: alarm, score 140.36</li>
+<li>seq 18: alarm, score 124.00</li>
+<li>seq 17: alarm, score 124.12</li>
+<li>seq 16: alarm, score 50.92</li>
+<li>seq 15: alarm, score 47.97</li></ul>
+    </section>
+  </div>
+  <h2>Recent Telemetry</h2>
+  <table><tr><th>Seq</th><th>State</th><th>Score</th><th>Alarm</th></tr><tr><td>13</td><td>imbalance</td><td>49.54</td><td>pending</td></tr>
+<tr><td>14</td><td>imbalance</td><td>49.72</td><td>alarm</td></tr>
+<tr><td>15</td><td>imbalance</td><td>47.97</td><td>alarm</td></tr>
+<tr><td>16</td><td>imbalance</td><td>50.92</td><td>alarm</td></tr>
+<tr><td>17</td><td>rubbing</td><td>124.12</td><td>alarm</td></tr>
+<tr><td>18</td><td>rubbing</td><td>124.00</td><td>alarm</td></tr>
+<tr><td>19</td><td>rubbing</td><td>140.36</td><td>alarm</td></tr>
+<tr><td>20</td><td>rubbing</td><td>19.44</td><td>alarm</td></tr>
+<tr><td>21</td><td>bearing</td><td>55.38</td><td>alarm</td></tr>
+<tr><td>22</td><td>bearing</td><td>52.88</td><td>alarm</td></tr>
+<tr><td>23</td><td>bearing</td><td>56.91</td><td>alarm</td></tr>
+<tr><td>24</td><td>bearing</td><td>43.23</td><td>alarm</td></tr></table>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[audio]
+sample_rate_hz = 16000
+clip_seconds = 1.0
+data_dir = "data/wav"
+model_path = "artifacts/audio_model.json"
+report_path = "reports/audio_anomaly_report.md"
+figure_path = "reports/audio_score_curve.png"
+

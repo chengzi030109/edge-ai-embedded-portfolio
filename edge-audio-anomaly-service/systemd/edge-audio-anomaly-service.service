@@ -1,0 +1,12 @@
+[Unit]
+Description=Edge Audio Anomaly Service Demo
+After=sound.target network.target
+
+[Service]
+WorkingDirectory=/opt/edge-audio-anomaly-service
+ExecStart=/usr/bin/python3 scripts/run_audio_demo.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

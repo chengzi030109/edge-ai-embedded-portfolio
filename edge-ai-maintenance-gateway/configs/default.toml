@@ -1,0 +1,7 @@
+[gateway]
+device_id = "sim-node-001"
+database_path = "data/gateway.db"
+telemetry_path = "../tinyml-predictive-maintenance/runs/telemetry.jsonl"
+report_path = "reports/gateway_report.md"
+dashboard_path = "reports/dashboard.html"
+

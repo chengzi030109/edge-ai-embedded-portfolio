@@ -1,0 +1,13 @@
+[Unit]
+Description=Edge AI Maintenance Gateway
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/edge-ai-maintenance-gateway
+ExecStart=/usr/bin/python3 scripts/run_gateway_demo.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+

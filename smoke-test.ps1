@@ -25,7 +25,25 @@ Push-Location "$PSScriptRoot\tinyml-predictive-maintenance"
 & $Python scripts\generate_figures.py
 Pop-Location
 
-# 2. Benchmark the model produced by the first project. PYTHONPATH is set so the
+# 2. Run the embedded Linux application-layer demos. They intentionally use the
+# same Python venv as the TinyML project so the whole portfolio remains easy to
+# verify on one laptop.
+Push-Location "$PSScriptRoot\edge-ai-maintenance-gateway"
+$env:PYTHONPATH = "src"
+& $Python scripts\run_gateway_demo.py
+Pop-Location
+
+Push-Location "$PSScriptRoot\edge-audio-anomaly-service"
+$env:PYTHONPATH = "src"
+& $Python scripts\run_audio_demo.py
+Pop-Location
+
+Push-Location "$PSScriptRoot\edge-vision-inspection"
+$env:PYTHONPATH = "src"
+& $Python scripts\run_vision_demo.py
+Pop-Location
+
+# 3. Benchmark the model produced by the first project. PYTHONPATH is set so the
 # edgebench package can be executed directly from source without installation.
 Push-Location "$PSScriptRoot\edgebench"
 $env:PYTHONPATH = "src"

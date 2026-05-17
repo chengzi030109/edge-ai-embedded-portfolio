@@ -1,0 +1,20 @@
+{
+  "feature_vector_size": 9,
+  "sample_count": 64,
+  "centroid_json_size_bytes": 735,
+  "onnx_model_size_bytes": 661,
+  "centroid": {
+    "backend": "centroid",
+    "model_path": "audio_model.json",
+    "latency_ms_avg": 0.0026968755264533684
+  },
+  "onnx": {
+    "backend": "onnx",
+    "model_path": "audio_model.onnx",
+    "latency_ms_avg": 0.01753281230776338
+  },
+  "score_error_mean": 1.5459954738616943e-07,
+  "score_error_max": 3.814697265625e-06,
+  "decision_mismatch_count": 0,
+  "onnx_status": "ok"
+}

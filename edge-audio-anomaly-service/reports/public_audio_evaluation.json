@@ -1,0 +1,725 @@
+{
+  "metrics": {
+    "tp": 42,
+    "tn": 24,
+    "fp": 11,
+    "fn": 0,
+    "precision": 0.7924528301886793,
+    "recall": 1.0,
+    "f1": 0.8842105263157896,
+    "accuracy": 0.8571428571428571,
+    "roc_auc": 0.9904761904761905
+  },
+  "scored_rows": [
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "label": "anomaly",
+      "window_index": 0,
+      "score": 75.99267578125,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "label": "anomaly",
+      "window_index": 1,
+      "score": 81.70011138916016,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "label": "anomaly",
+      "window_index": 2,
+      "score": 80.81106567382812,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "label": "anomaly",
+      "window_index": 3,
+      "score": 80.01226806640625,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "label": "anomaly",
+      "window_index": 4,
+      "score": 79.20772552490234,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "label": "anomaly",
+      "window_index": 5,
+      "score": 80.2460708618164,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_00.wav",
+      "label": "anomaly",
+      "window_index": 6,
+      "score": 80.139892578125,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "label": "anomaly",
+      "window_index": 0,
+      "score": 16.928869247436523,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "label": "anomaly",
+      "window_index": 1,
+      "score": 16.226865768432617,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "label": "anomaly",
+      "window_index": 2,
+      "score": 16.9605655670166,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "label": "anomaly",
+      "window_index": 3,
+      "score": 18.068876266479492,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "label": "anomaly",
+      "window_index": 4,
+      "score": 17.18088722229004,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "label": "anomaly",
+      "window_index": 5,
+      "score": 18.124492645263672,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_01.wav",
+      "label": "anomaly",
+      "window_index": 6,
+      "score": 17.524343490600586,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "label": "anomaly",
+      "window_index": 0,
+      "score": 41.24153518676758,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "label": "anomaly",
+      "window_index": 1,
+      "score": 40.325923919677734,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "label": "anomaly",
+      "window_index": 2,
+      "score": 38.793312072753906,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "label": "anomaly",
+      "window_index": 3,
+      "score": 40.834938049316406,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "label": "anomaly",
+      "window_index": 4,
+      "score": 41.962013244628906,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "label": "anomaly",
+      "window_index": 5,
+      "score": 40.274627685546875,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_02.wav",
+      "label": "anomaly",
+      "window_index": 6,
+      "score": 39.08453369140625,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "label": "anomaly",
+      "window_index": 0,
+      "score": 24.076045989990234,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "label": "anomaly",
+      "window_index": 1,
+      "score": 25.5183162689209,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "label": "anomaly",
+      "window_index": 2,
+      "score": 25.163068771362305,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "label": "anomaly",
+      "window_index": 3,
+      "score": 22.607568740844727,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "label": "anomaly",
+      "window_index": 4,
+      "score": 27.37301254272461,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "label": "anomaly",
+      "window_index": 5,
+      "score": 26.777164459228516,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_03.wav",
+      "label": "anomaly",
+      "window_index": 6,
+      "score": 24.735403060913086,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "label": "anomaly",
+      "window_index": 0,
+      "score": 30.543813705444336,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "label": "anomaly",
+      "window_index": 1,
+      "score": 29.424240112304688,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "label": "anomaly",
+      "window_index": 2,
+      "score": 28.610157012939453,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "label": "anomaly",
+      "window_index": 3,
+      "score": 27.717872619628906,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "label": "anomaly",
+      "window_index": 4,
+      "score": 27.526269912719727,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "label": "anomaly",
+      "window_index": 5,
+      "score": 26.915163040161133,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_04.wav",
+      "label": "anomaly",
+      "window_index": 6,
+      "score": 27.445899963378906,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "label": "anomaly",
+      "window_index": 0,
+      "score": 28.192832946777344,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "label": "anomaly",
+      "window_index": 1,
+      "score": 30.944782257080078,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "label": "anomaly",
+      "window_index": 2,
+      "score": 30.158222198486328,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "label": "anomaly",
+      "window_index": 3,
+      "score": 28.591962814331055,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "label": "anomaly",
+      "window_index": 4,
+      "score": 26.767553329467773,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "label": "anomaly",
+      "window_index": 5,
+      "score": 27.61343765258789,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "relative_path": "fan\\id_00\\test\\abnormal\\abnormal_test_05.wav",
+      "label": "anomaly",
+      "window_index": 6,
+      "score": 28.575374603271484,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "label": "normal",
+      "window_index": 0,
+      "score": 20.422653198242188,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "label": "normal",
+      "window_index": 1,
+      "score": 20.41275405883789,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "label": "normal",
+      "window_index": 2,
+      "score": 4.416555881500244,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "label": "normal",
+      "window_index": 3,
+      "score": 4.745439052581787,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "label": "normal",
+      "window_index": 4,
+      "score": 4.953141212463379,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "label": "normal",
+      "window_index": 5,
+      "score": 5.097856521606445,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_00.wav",
+      "label": "normal",
+      "window_index": 6,
+      "score": 4.965521335601807,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "label": "normal",
+      "window_index": 0,
+      "score": 12.343389511108398,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "label": "normal",
+      "window_index": 1,
+      "score": 12.722844123840332,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "label": "normal",
+      "window_index": 2,
+      "score": 12.079479217529297,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "label": "normal",
+      "window_index": 3,
+      "score": 12.18392276763916,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "label": "normal",
+      "window_index": 4,
+      "score": 10.866847038269043,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "label": "normal",
+      "window_index": 5,
+      "score": 11.685192108154297,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_01.wav",
+      "label": "normal",
+      "window_index": 6,
+      "score": 12.674330711364746,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "label": "normal",
+      "window_index": 0,
+      "score": 6.677364826202393,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "label": "normal",
+      "window_index": 1,
+      "score": 6.773524284362793,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "label": "normal",
+      "window_index": 2,
+      "score": 4.407186508178711,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "label": "normal",
+      "window_index": 3,
+      "score": 5.01978874206543,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "label": "normal",
+      "window_index": 4,
+      "score": 3.928741931915283,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "label": "normal",
+      "window_index": 5,
+      "score": 3.3869471549987793,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_02.wav",
+      "label": "normal",
+      "window_index": 6,
+      "score": 5.012810707092285,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "label": "normal",
+      "window_index": 0,
+      "score": 5.270615100860596,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "label": "normal",
+      "window_index": 1,
+      "score": 4.916172027587891,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "label": "normal",
+      "window_index": 2,
+      "score": 5.295862674713135,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "label": "normal",
+      "window_index": 3,
+      "score": 5.059684753417969,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "label": "normal",
+      "window_index": 4,
+      "score": 5.924605846405029,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "label": "normal",
+      "window_index": 5,
+      "score": 15.958500862121582,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_03.wav",
+      "label": "normal",
+      "window_index": 6,
+      "score": 15.847004890441895,
+      "threshold": 8.814027786254883,
+      "is_anomaly": true
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "label": "normal",
+      "window_index": 0,
+      "score": 1.2092713117599487,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "label": "normal",
+      "window_index": 1,
+      "score": 1.4321192502975464,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "label": "normal",
+      "window_index": 2,
+      "score": 1.7868931293487549,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "label": "normal",
+      "window_index": 3,
+      "score": 1.2813849449157715,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "label": "normal",
+      "window_index": 4,
+      "score": 1.606237769126892,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "label": "normal",
+      "window_index": 5,
+      "score": 1.3577412366867065,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    },
+    {
+      "path": "data\\public_audio_sample\\fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "relative_path": "fan\\id_00\\test\\normal\\normal_test_04.wav",
+      "label": "normal",
+      "window_index": 6,
+      "score": 2.2186834812164307,
+      "threshold": 8.814027786254883,
+      "is_anomaly": false
+    }
+  ],
+  "dataset_root": "data\\public_audio_sample",
+  "dataset_summary": {
+    "count": 21,
+    "labels": {
+      "normal": 15,
+      "anomaly": 6
+    },
+    "splits": {
+      "test": 11,
+      "train": 10
+    }
+  },
+  "train_clip_count": 10,
+  "eval_clip_count": 11,
+  "train_window_count": 70,
+  "eval_window_count": 77,
+  "model_backend": "centroid"
+}

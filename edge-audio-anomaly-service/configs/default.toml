@@ -2,7 +2,16 @@
 sample_rate_hz = 16000
 clip_seconds = 1.0
 data_dir = "data/wav"
+model_backend = "centroid"
 model_path = "artifacts/audio_model.json"
+onnx_model_path = "artifacts/audio_model.onnx"
 report_path = "reports/audio_anomaly_report.md"
 figure_path = "reports/audio_score_curve.png"
-
+database_path = "data/audio_events.db"
+events_json = "reports/audio_events.json"
+clips_dir = "reports/anomaly_clips"
+window_seconds = 0.25
+hop_seconds = 0.125
+save_anomaly_clips = true
+alarm_on_count = 3
+alarm_off_count = 5

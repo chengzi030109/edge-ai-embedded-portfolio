@@ -16,6 +16,7 @@ edge-vision-inspection/data/
 edge-ai-maintenance-gateway/artifacts/
 edge-audio-anomaly-service/artifacts/
 edge-vision-inspection/artifacts/
+edge-audio-anomaly-service/reports/anomaly_clips/
 *.exe
 *.obj
 *.o

@@ -36,7 +36,11 @@ CREATE TABLE IF NOT EXISTS audio_events (
 def connect(path: str | Path) -> sqlite3.Connection:
     db_path = Path(path)
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(db_path)
+    # FastAPI runs normal def endpoints in a thread pool. The API factory keeps
+    # one SQLite connection for this tiny edge service, so the connection must
+    # be usable from those worker threads. The API layer serializes access with
+    # a lock; scripts still behave the same as before.
+    conn = sqlite3.connect(db_path, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 

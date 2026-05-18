@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 from pathlib import Path
+from threading import Lock
 
 from .alarm import AlarmDebouncer
 from .backends import load_backend
@@ -49,6 +50,7 @@ def create_app(
     app = FastAPI(title="Edge Audio Anomaly Service")
     conn = connect(database_path)
     init_db(conn)
+    db_lock = Lock()
     upload_dir = Path(database_path).resolve().parent / "uploads"
     upload_dir.mkdir(parents=True, exist_ok=True)
 
@@ -105,7 +107,8 @@ def create_app(
             "clip_path": "",
             "features": {name: float(value) for name, value in zip(model.feature_names, features, strict=False)},
         }
-        insert_events(conn, [event])
+        with db_lock:
+            insert_events(conn, [event])
         return event
 
     @app.post("/api/v1/audio/analyze-windowed")
@@ -124,7 +127,8 @@ def create_app(
                 off_count=int(payload.get("alarm_off_count", 5)),
             ),
         )
-        insert_events(conn, rows)
+        with db_lock:
+            insert_events(conn, rows)
         return {"events": rows, "count": len(rows)}
 
     @app.post("/api/v1/audio/upload")
@@ -155,7 +159,8 @@ def create_app(
             float(hop_seconds),
             debouncer=AlarmDebouncer(on_count=int(alarm_on_count), off_count=int(alarm_off_count)),
         )
-        insert_events(conn, rows)
+        with db_lock:
+            insert_events(conn, rows)
         return {
             "path": str(saved_path),
             "count": len(rows),
@@ -169,16 +174,19 @@ def create_app(
         """Mark buffered events as uploaded and optionally acknowledged."""
 
         event_ids = [int(event_id) for event_id in payload.get("event_ids", [])]
-        changed = mark_events_uploaded(conn, event_ids, ack=bool(payload.get("ack", True)))
+        with db_lock:
+            changed = mark_events_uploaded(conn, event_ids, ack=bool(payload.get("ack", True)))
         return {"updated": changed, "ack": bool(payload.get("ack", True))}
 
     @app.get("/api/v1/audio/events")
     def get_events(limit: int = 50):
-        return list_events(conn, limit=limit)
+        with db_lock:
+            return list_events(conn, limit=limit)
 
     @app.get("/api/v1/audio/summary")
     def get_summary():
-        return summary(conn)
+        with db_lock:
+            return summary(conn)
 
     @app.get("/healthz")
     def healthz():
@@ -191,7 +199,8 @@ def create_app(
 
     @app.get("/metrics", response_class=PlainTextResponse)
     def metrics():
-        stats = summary(conn)
+        with db_lock:
+            stats = summary(conn)
         lines = [
             "# HELP edge_audio_events_total Total audio window events buffered locally.",
             "# TYPE edge_audio_events_total counter",

@@ -39,6 +39,14 @@ cd E:\linux
 docker compose up --build edge-audio
 ```
 
+Domestic network fallback:
+
+```powershell
+cd E:\linux
+$env:PYTHON_IMAGE="docker.m.daocloud.io/library/python:3.12-slim"
+docker compose up --build edge-audio
+```
+
 Open:
 
 ```text
@@ -76,6 +84,8 @@ alarm windows: 33
 
 The demo writes `reports/audio_anomaly_report.md` and
 `reports/audio_score_curve.png`.
+
+![Edge Audio dashboard](../docs/assets/edge-audio-dashboard.png)
 
 ```mermaid
 flowchart LR

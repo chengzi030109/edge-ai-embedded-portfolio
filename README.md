@@ -45,6 +45,8 @@ repo. It demonstrates the complete path from replay input to deployable service:
 - FastAPI contracts for upload, event query, health check, metrics, and ack.
 - systemd service file and logrotate example.
 
+![Edge Audio dashboard](docs/assets/edge-audio-dashboard.png)
+
 ```mermaid
 flowchart LR
     A["WAV replay / HTTP upload"] --> B["Windowed audio features"]
@@ -103,6 +105,15 @@ Run the audio service dashboard with Docker Compose:
 
 ```powershell
 cd E:\linux
+docker compose up --build edge-audio
+```
+
+If Docker Hub is slow or blocked on a domestic network, switch only the base
+Python image and keep the same Compose file:
+
+```powershell
+cd E:\linux
+$env:PYTHON_IMAGE="docker.m.daocloud.io/library/python:3.12-slim"
 docker compose up --build edge-audio
 ```
 

@@ -27,7 +27,7 @@ except Exception as exc:  # pragma: no cover - depends on optional torch/onnx st
     raise SystemExit(
         "Autoencoder quantization requires a working torch/onnxruntime stack. "
         f"Current environment failed while importing it: {exc}"
-    )
+    ) from exc
 from tpm.datasets.cwru import CWRU_SAMPLE_RATE_HZ, load_all
 from tpm.features import FEATURE_NAMES, FeatureConfig, extract_features, vectorize
 

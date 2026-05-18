@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT / "src"))
 import numpy as np
 
 from tpm.config import load_config
-from tpm.features import FEATURE_NAMES, FeatureConfig, extract_features, vectorize
+from tpm.features import FeatureConfig, extract_features, vectorize
 from tpm.fixed_point import compare_fixed_point
 from tpm.model import CentroidAnomalyDetector
 from tpm.signal_sim import MotorSignalSimulator, SignalConfig

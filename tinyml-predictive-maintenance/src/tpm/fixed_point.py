@@ -26,7 +26,6 @@ import numpy as np
 
 from .model import CentroidAnomalyDetector
 
-
 Q_FRACTIONAL_BITS = 8
 Q_STEP = 1.0 / (1 << Q_FRACTIONAL_BITS)
 Q_SCALE = 1 << Q_FRACTIONAL_BITS

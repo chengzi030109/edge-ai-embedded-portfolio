@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1.7
-
 # Pin the default image to a digest so builds are reproducible during review.
 # Reviewers behind a domestic mirror can still override it:
 #   PYTHON_IMAGE=docker.m.daocloud.io/library/python:3.12-slim docker compose up --build edge-audio
@@ -23,7 +21,6 @@ WORKDIR /build
 COPY pyproject.toml requirements.txt README.md ./
 COPY src ./src
 RUN python -m venv /opt/venv \
-    && /opt/venv/bin/pip install --upgrade pip \
     && /opt/venv/bin/pip install -r requirements.txt
 
 # ---------------------------------------------------------------------------

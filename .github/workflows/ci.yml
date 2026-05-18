@@ -5,12 +5,14 @@ on:
     paths:
       - 'README.md'
       - 'docs/**'
+      - 'docker-compose.yml'
       - 'edge-audio-anomaly-service/**'
       - '.github/workflows/ci.yml'
   pull_request:
     paths:
       - 'README.md'
       - 'docs/**'
+      - 'docker-compose.yml'
       - 'edge-audio-anomaly-service/**'
       - '.github/workflows/ci.yml'
   workflow_dispatch:
@@ -53,3 +55,7 @@ jobs:
 
       - name: Benchmark deployment backends
         run: python scripts/benchmark_model_backends.py
+
+      - name: Validate Docker Compose config
+        working-directory: ${{ github.workspace }}
+        run: docker compose config

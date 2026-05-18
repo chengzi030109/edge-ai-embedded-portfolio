@@ -99,6 +99,21 @@ cd E:\linux\edge-audio-anomaly-service
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\benchmark_model_backends.py
 ```
 
+Run the audio service dashboard with Docker Compose:
+
+```powershell
+cd E:\linux
+docker compose up --build edge-audio
+```
+
+Then open:
+
+```text
+http://localhost:8080/dashboard
+http://localhost:8080/healthz
+http://localhost:8080/metrics
+```
+
 Full local smoke test:
 
 ```powershell
@@ -127,6 +142,7 @@ More detail:
 
 - [Portfolio roadmap](docs/portfolio-roadmap.md)
 - [Interview cheatsheet](docs/interview-cheatsheet.md)
+- [Interview Q&A](docs/interview-qna.md)
 - [Resume project writeups](docs/resume-projects.md)
 - [Resume-ready short version](docs/resume-short.md)
 - [Demo script](docs/demo-script.md)

@@ -190,6 +190,8 @@ def test_dataset_window_analysis_saves_anomaly_clips(tmp_path):
 
 
 def test_api_route_contract():
+    assert "GET /" in ROUTES
+    assert "GET /dashboard" in ROUTES
     assert "POST /api/v1/audio/analyze" in ROUTES
     assert "POST /api/v1/audio/analyze-windowed" in ROUTES
     assert "POST /api/v1/audio/upload" in ROUTES
@@ -214,6 +216,12 @@ def test_api_health_metrics_and_upload(tmp_path):
     health = client.get("/healthz")
     assert health.status_code == 200
     assert health.json()["status"] == "ok"
+
+    dashboard = client.get("/dashboard")
+    assert dashboard.status_code == 200
+    assert "Edge Audio Anomaly Dashboard" in dashboard.text
+    assert "/api/v1/audio/upload" in dashboard.text
+    assert "/metrics" in dashboard.text
 
     wav_path = rows[0]["path"]
     with open(wav_path, "rb") as fh:

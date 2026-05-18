@@ -1,0 +1,12 @@
+services:
+  edge-audio:
+    build:
+      context: ./edge-audio-anomaly-service
+    image: edge-audio-anomaly-service:portfolio
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./edge-audio-anomaly-service/data:/app/data
+      - ./edge-audio-anomaly-service/artifacts:/app/artifacts
+      - ./edge-audio-anomaly-service/reports:/app/reports
+    restart: unless-stopped

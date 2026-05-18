@@ -12,6 +12,8 @@ from .storage import connect, init_db, insert_events, list_events, mark_events_u
 from .streaming import analyze_wav_windows
 
 ROUTES = [
+    "GET /",
+    "GET /dashboard",
     "POST /api/v1/audio/analyze",
     "POST /api/v1/audio/analyze-windowed",
     "POST /api/v1/audio/upload",
@@ -40,7 +42,7 @@ def create_app(
 
     try:
         from fastapi import FastAPI, File, UploadFile
-        from fastapi.responses import PlainTextResponse
+        from fastapi.responses import HTMLResponse, PlainTextResponse
     except Exception as exc:  # pragma: no cover
         raise RuntimeError("FastAPI is optional; install requirements.txt or pip install -e .[api] to run the API server") from exc
 
@@ -54,6 +56,18 @@ def create_app(
         """Load the configured backend on demand so model files can be replaced."""
 
         return load_backend(backend, centroid_model_path=model_path, onnx_model_path=onnx_model_path)
+
+    @app.get("/", response_class=HTMLResponse)
+    @app.get("/dashboard", response_class=HTMLResponse)
+    def dashboard():
+        """Serve a small browser dashboard for local operator demos.
+
+        The page is intentionally plain HTML, CSS, and browser fetch() calls.
+        That keeps embedded Linux deployment simple: no Node.js runtime, no
+        frontend build step, and no second service to supervise with systemd.
+        """
+
+        return DASHBOARD_HTML
 
     @app.post("/api/v1/audio/analyze")
     def analyze(payload: dict):
@@ -199,3 +213,234 @@ def create_app(
         return "\n".join(lines)
 
     return app
+
+
+DASHBOARD_HTML = r"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edge Audio Anomaly Dashboard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #667085;
+      --line: #d8dee9;
+      --accent: #0f766e;
+      --alarm: #b42318;
+      --ok: #087443;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      padding: 20px 24px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .sub {
+      margin-top: 4px;
+      color: var(--muted);
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .card, section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .value {
+      margin-top: 4px;
+      font-size: 28px;
+      font-weight: 750;
+    }
+    .ok { color: var(--ok); }
+    .alarm { color: var(--alarm); }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+      gap: 16px;
+    }
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+    form {
+      display: grid;
+      gap: 10px;
+    }
+    input, button {
+      width: 100%;
+      min-height: 38px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      font: inherit;
+    }
+    button {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      cursor: pointer;
+      font-weight: 650;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .status {
+      margin-top: 8px;
+      color: var(--muted);
+      min-height: 20px;
+    }
+    pre {
+      margin: 0;
+      overflow: auto;
+      max-height: 240px;
+      background: #0f172a;
+      color: #e5edf7;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Edge Audio Anomaly Dashboard</h1>
+    <div class="sub">Local embedded-Linux service view for WAV upload, alarm state, SQLite events, and Prometheus-style metrics.</div>
+  </header>
+  <main>
+    <div class="stats">
+      <div class="card"><div class="label">Buffered Events</div><div id="events" class="value">0</div></div>
+      <div class="card"><div class="label">Raw Anomalies</div><div id="raw" class="value">0</div></div>
+      <div class="card"><div class="label">Alarm Windows</div><div id="alarms" class="value">0</div></div>
+      <div class="card"><div class="label">Pending Upload</div><div id="pending" class="value">0</div></div>
+    </div>
+    <div class="grid">
+      <section>
+        <h2>Upload WAV</h2>
+        <form id="upload-form">
+          <input id="file" type="file" accept=".wav,audio/wav" required />
+          <input id="label" type="text" value="unknown" aria-label="label" />
+          <button type="submit">Analyze Upload</button>
+        </form>
+        <div id="upload-status" class="status"></div>
+      </section>
+      <section>
+        <h2>Metrics</h2>
+        <pre id="metrics">loading...</pre>
+      </section>
+    </div>
+    <section>
+      <h2>Recent Events</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>State</th>
+            <th>Score</th>
+            <th>Threshold</th>
+            <th>Uploaded</th>
+            <th>Ack</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+  </main>
+  <script>
+    async function refresh() {
+      const [summary, events, metrics] = await Promise.all([
+        fetch('/api/v1/audio/summary').then(r => r.json()),
+        fetch('/api/v1/audio/events?limit=12').then(r => r.json()),
+        fetch('/metrics').then(r => r.text())
+      ]);
+      document.getElementById('events').textContent = summary.event_count;
+      document.getElementById('raw').textContent = summary.raw_anomaly_count;
+      const alarms = document.getElementById('alarms');
+      alarms.textContent = summary.alarm_count;
+      alarms.className = 'value ' + (summary.alarm_count > 0 ? 'alarm' : 'ok');
+      document.getElementById('pending').textContent = summary.pending_upload_count;
+      document.getElementById('metrics').textContent = metrics.trim();
+      const tbody = document.getElementById('rows');
+      tbody.innerHTML = '';
+      for (const event of events) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${event.id}</td>
+          <td>${event.alarm_state}</td>
+          <td>${Number(event.score).toFixed(3)}</td>
+          <td>${Number(event.threshold).toFixed(3)}</td>
+          <td>${event.uploaded}</td>
+          <td>${event.ack}</td>
+          <td>${event.source}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+
+    document.getElementById('upload-form').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const file = document.getElementById('file').files[0];
+      const label = document.getElementById('label').value || 'unknown';
+      const body = new FormData();
+      body.append('file', file);
+      body.append('label', label);
+      const status = document.getElementById('upload-status');
+      status.textContent = 'uploading and analyzing...';
+      const response = await fetch('/api/v1/audio/upload', { method: 'POST', body });
+      const payload = await response.json();
+      status.textContent = `analyzed ${payload.count || 0} windows; alarms ${payload.alarms || 0}`;
+      await refresh();
+    });
+
+    refresh();
+    setInterval(refresh, 4000);
+  </script>
+</body>
+</html>
+"""

@@ -16,7 +16,8 @@ as sliding stream windows.
 - Pluggable inference backend: default centroid now, optional ONNX Runtime later.
 - Alarm debounce that separates raw model spikes from stable device alarms.
 - SQLite edge buffering, anomaly clip extraction, Markdown/PNG/JSON reports,
-  API route contract, and systemd deployment shape.
+  API route contract, browser dashboard, Docker Compose, and systemd deployment
+  shape.
 
 ## Quick Start
 
@@ -29,6 +30,22 @@ cd E:\linux\edge-audio-anomaly-service
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\api_smoke_test.py
 $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe -m pytest -q
+```
+
+Dashboard through Docker Compose from the repository root:
+
+```powershell
+cd E:\linux
+docker compose up --build edge-audio
+```
+
+Open:
+
+```text
+http://localhost:8080/dashboard
+http://localhost:8080/docs
+http://localhost:8080/healthz
+http://localhost:8080/metrics
 ```
 
 Outputs:
@@ -93,6 +110,8 @@ Regenerate the summary figures from report JSON:
 - `POST /api/v1/audio/events/ack`
 - `GET /api/v1/audio/events`
 - `GET /api/v1/audio/summary`
+- `GET /`
+- `GET /dashboard`
 - `GET /healthz`
 - `GET /metrics`
 
@@ -105,6 +124,11 @@ Example service command:
 ```powershell
 ..\tinyml-predictive-maintenance\.venv\Scripts\python.exe -m uvicorn edge_audio.api:create_app --factory --host 127.0.0.1 --port 8080
 ```
+
+The dashboard is intentionally served by the same FastAPI process. It uses
+plain HTML and browser `fetch()` calls against `/api/v1/audio/summary`,
+`/api/v1/audio/events`, `/api/v1/audio/upload`, and `/metrics`, so there is no
+Node.js build step and no second process to deploy on an embedded Linux board.
 
 API smoke test:
 

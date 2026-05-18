@@ -3,11 +3,57 @@
 [![Portfolio CI](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/ci.yml)
 [![TinyML CI](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/tinyml-predictive-maintenance.yml/badge.svg)](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/tinyml-predictive-maintenance.yml)
 
-Hardware-free edge AI + embedded portfolio for internship applications. This is
-a single monorepo, not a set of unrelated demos: each subproject covers one
-piece of the embedded AI stack, from MCU/TinyML sensing to embedded Linux
-services, local buffering, ONNX-style deployment, FastAPI contracts, systemd
-deployment, CI, and reproducible reports.
+Hardware-free edge AI + embedded portfolio for internship applications: TinyML
+predictive maintenance, Dockerized embedded-Linux audio anomaly service, edge
+gateway, visual inspection, SQLite buffering, FastAPI/systemd deployment, and
+CI-backed demos.
+
+![Edge Audio 30-second demo](docs/assets/edge-audio-demo.gif)
+
+## Projects
+
+| Project | What It Shows | Keywords | Run |
+|---|---|---|---|
+| [Edge Audio Anomaly Service](edge-audio-anomaly-service/) | Industrial audio anomaly service with dashboard, upload, metrics, SQLite, Docker, and systemd. | Embedded Linux, FastAPI, SQLite, ONNX-ready, Docker | `docker compose up --build edge-audio` |
+| [TinyML Predictive Maintenance](tinyml-predictive-maintenance/) | MCU/TinyML-style vibration anomaly pipeline with fixed-point analysis and C inference path. | TinyML, fixed-point, C, ONNX/INT8, PHM2008 | `python scripts/run_portfolio_demo.py --quick` |
+| [Edge AI Maintenance Gateway](edge-ai-maintenance-gateway/) | Telemetry ingest gateway with local persistence and API/dashboard shape. | Gateway, JSONL replay, HTTP ingest, SQLite | `python scripts/run_gateway_demo.py` |
+| [Edge Vision Inspection](edge-vision-inspection/) | Synthetic defect inspection and annotated report generation. | Vision inspection, batch replay, reports | `python scripts/run_vision_demo.py` |
+| [EdgeBench](edgebench/) | Small utility for measuring edge model latency and footprint. | Benchmark, latency, footprint | `python -m edgebench run --help` |
+
+## One-Command Demo
+
+```powershell
+cd E:\linux
+docker compose up --build edge-audio
+```
+
+Domestic network fallback:
+
+```powershell
+cd E:\linux
+$env:PYTHON_IMAGE="docker.m.daocloud.io/library/python:3.12-slim"
+docker compose up --build edge-audio
+```
+
+Open:
+
+```text
+http://localhost:8080/dashboard
+http://localhost:8080/docs
+http://localhost:8080/healthz
+http://localhost:8080/metrics
+```
+
+Demo move: upload `edge-audio-anomaly-service/data/wav/anomaly/anomaly_01.wav`
+from the dashboard and watch alarm counts, recent events, and metrics update.
+
+## Copy/Paste For Applications
+
+- [Submission package](docs/submission-package.md)
+- [Resume-ready short version](docs/resume-short.md)
+- [3-minute demo script](docs/demo-script-3min.md)
+- [Interview Q&A](docs/interview-qna.md)
+- [Demo troubleshooting](docs/demo-troubleshooting.md)
 
 ## Monorepo Shape
 
@@ -17,35 +63,22 @@ E:\linux
 ├── edge-audio-anomaly-service/        # strongest embedded Linux service demo
 ├── edge-ai-maintenance-gateway/       # telemetry gateway and local persistence
 ├── edge-vision-inspection/            # visual inspection demo
-├── edgebench/                         # small benchmark utility
+├── edgebench/                         # benchmark utility
 ├── docs/                              # resume, demo, roadmap, interview notes
 └── .github/workflows/                 # portfolio CI and TinyML CI
 ```
 
-## Project Overview
+## Edge Audio Details
 
-| Project | Problem | Embedded / AI Keywords | Demo Command | Status |
-|---|---|---|---|---|
-| [TinyML Predictive Maintenance](tinyml-predictive-maintenance/) | Detect vibration degradation from simulated sensor windows and export MCU-ready parameters. | TinyML, Q-format simulation, C inference, ONNX/INT8, PHM2008, telemetry | `python scripts/run_portfolio_demo.py --quick` | Portfolio-ready |
-| [Edge Audio Anomaly Service](edge-audio-anomaly-service/) | Detect abnormal industrial machine sound as a Linux edge service. | WAV replay, spectral features, ONNX Runtime backend, SQLite, FastAPI, systemd, metrics | `python scripts/run_audio_demo.py` | Portfolio-ready |
-| [Edge AI Maintenance Gateway](edge-ai-maintenance-gateway/) | Ingest TinyML telemetry, store events locally, and expose gateway APIs/dashboard data. | JSONL replay, HTTP ingest contract, SQLite, dashboard, Linux gateway | `python scripts/run_gateway_demo.py` | Demo-ready |
-| [Edge Vision Inspection](edge-vision-inspection/) | Detect synthetic visual defects and produce annotated inspection reports. | Image features, batch replay, annotated outputs, edge inspection | `python scripts/run_vision_demo.py` | Demo-ready |
-| [EdgeBench](edgebench/) | Measure latency and footprint for edge AI model artifacts. | Benchmark CLI, latency, throughput, report generation | `python -m edgebench run --model ../tinyml-predictive-maintenance/artifacts/model.json --input-size 10` | Utility |
-
-## Highlight: Edge Audio Anomaly Service
-
-This is currently the strongest embedded Linux application-layer project in the
-repo. It demonstrates the complete path from replay input to deployable service:
+The audio service demonstrates the full embedded Linux application-layer path:
 
 - Synthetic WAV and MIMII/ToyADMOS-style folder evaluation.
-- Nine lightweight audio features for low-resource edge inference.
+- Sliding-window audio features: RMS, ZCR, spectral centroid, flatness, band energy.
 - Centroid anomaly detector with optional ONNX Runtime backend.
 - Raw anomaly output separated from debounced equipment alarm state.
 - SQLite event buffer with `uploaded` and `ack` fields for offline operation.
 - FastAPI contracts for upload, event query, health check, metrics, and ack.
-- systemd service file and logrotate example.
-
-![Edge Audio 30-second demo](docs/assets/edge-audio-demo.gif)
+- Docker Compose demo, systemd service file, and logrotate example.
 
 ![Edge Audio dashboard](docs/assets/edge-audio-dashboard.png)
 
@@ -59,34 +92,13 @@ flowchart LR
     E --> G["Markdown / JSON reports"]
 ```
 
-![Audio score curve](edge-audio-anomaly-service/reports/audio_score_curve.png)
-
-| Public Audio Evaluation | Model Deployment |
-|---|---|
-| ![Public audio evaluation](edge-audio-anomaly-service/reports/figures/public_audio_eval_summary.png) | ![Model deployment summary](edge-audio-anomaly-service/reports/figures/model_deployment_summary.png) |
-
 Key reports:
 
 - [Audio anomaly report](edge-audio-anomaly-service/reports/audio_anomaly_report.md)
 - [Model deployment report](edge-audio-anomaly-service/reports/model_deployment_report.md)
 - [Public audio evaluation report](edge-audio-anomaly-service/reports/public_audio_evaluation.md)
 
-API surface:
-
-```text
-POST /api/v1/audio/analyze
-POST /api/v1/audio/analyze-windowed
-POST /api/v1/audio/upload
-POST /api/v1/audio/events/ack
-GET  /api/v1/audio/events
-GET  /api/v1/audio/summary
-GET  /healthz
-GET  /metrics
-```
-
-## Quick Start
-
-Use the shared Python environment you already created for the TinyML project:
+## Local Verification
 
 ```powershell
 cd E:\linux
@@ -94,79 +106,9 @@ $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
 .\tinyml-predictive-maintenance\.venv\Scripts\python.exe -m pytest -q edge-audio-anomaly-service
 ```
 
-Run the main demos:
-
-```powershell
-cd E:\linux\edge-audio-anomaly-service
-..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\run_audio_demo.py
-..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\evaluate_public_audio_dataset.py
-..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\benchmark_model_backends.py
-```
-
-Run the audio service dashboard with Docker Compose:
-
-```powershell
-cd E:\linux
-docker compose up --build edge-audio
-```
-
-If Docker Hub is slow or blocked on a domestic network, switch only the base
-Python image and keep the same Compose file:
-
-```powershell
-cd E:\linux
-$env:PYTHON_IMAGE="docker.m.daocloud.io/library/python:3.12-slim"
-docker compose up --build edge-audio
-```
-
-Then open:
-
-```text
-http://localhost:8080/dashboard
-http://localhost:8080/healthz
-http://localhost:8080/metrics
-```
-
-Full local smoke test:
+Full smoke test:
 
 ```powershell
 cd E:\linux
 .\smoke-test.ps1 -Python "E:\linux\tinyml-predictive-maintenance\.venv\Scripts\python.exe"
-```
-
-## Interview Pitch
-
-Use this repo as a compact story:
-
-> I built a hardware-free AI + embedded portfolio. One project simulates a
-> TinyML predictive-maintenance node with MCU-oriented deployment artifacts.
-> The Linux-side projects turn model outputs into services: telemetry gateway,
-> industrial audio anomaly service, visual inspection, SQLite buffering, API
-> contracts, reports, and systemd deployment.
-
-Best project to lead with:
-
-> Edge Audio Anomaly Service: a Linux edge service that replays or uploads WAV
-> audio, extracts low-cost spectral features, runs a small anomaly model or ONNX
-> backend, debounces alarms, stores events in SQLite for offline operation, and
-> exposes health/metrics/API endpoints.
-
-More detail:
-
-- [Portfolio roadmap](docs/portfolio-roadmap.md)
-- [Interview cheatsheet](docs/interview-cheatsheet.md)
-- [Interview Q&A](docs/interview-qna.md)
-- [Resume project writeups](docs/resume-projects.md)
-- [Resume-ready short version](docs/resume-short.md)
-- [Demo script](docs/demo-script.md)
-- [3-minute demo script](docs/demo-script-3min.md)
-
-## Showcase Figures
-
-The small summary figures in `edge-audio-anomaly-service/reports/figures/` are
-generated from report JSON files:
-
-```powershell
-cd E:\linux\edge-audio-anomaly-service
-..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\generate_showcase_figures.py
 ```

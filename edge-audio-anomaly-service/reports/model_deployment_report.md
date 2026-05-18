@@ -10,8 +10,8 @@
 
 | Backend | Avg inference ms | Model path |
 |---|---:|---|
-| centroid | 0.002741 | audio_model.json |
-| onnx | 0.020205 | audio_model.onnx |
+| centroid | 0.004589 | audio_model.json |
+| onnx | 0.032013 | audio_model.onnx |
 
 ## Parity
 

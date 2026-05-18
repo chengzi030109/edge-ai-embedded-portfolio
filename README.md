@@ -1,98 +1,101 @@
-# AI + Embedded Internship Portfolio
+# AI + Embedded Linux Portfolio
 
-This workspace contains hardware-free projects designed for AI + embedded
-internship applications.
+[![Portfolio CI](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/ci.yml)
+[![TinyML CI](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/tinyml-predictive-maintenance.yml/badge.svg)](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/tinyml-predictive-maintenance.yml)
 
-## Projects
+Hardware-free AI + embedded projects for internship applications. The portfolio
+covers MCU/TinyML thinking, embedded Linux services, local data buffering,
+ONNX-style deployment, SQLite, FastAPI contracts, systemd deployment, and
+reproducible reports.
 
-### 1. TinyML Predictive Maintenance System
+## Project Overview
 
-Path: `tinyml-predictive-maintenance`
+| Project | Problem | Embedded / AI Keywords | Demo Command | Status |
+|---|---|---|---|---|
+| [TinyML Predictive Maintenance](tinyml-predictive-maintenance/) | Detect vibration degradation from simulated sensor windows and export MCU-ready parameters. | TinyML, Q-format simulation, C inference, ONNX/INT8, PHM2008, telemetry | `python scripts/run_portfolio_demo.py --quick` | Portfolio-ready |
+| [Edge Audio Anomaly Service](edge-audio-anomaly-service/) | Detect abnormal industrial machine sound as a Linux edge service. | WAV replay, spectral features, ONNX Runtime backend, SQLite, FastAPI, systemd, metrics | `python scripts/run_audio_demo.py` | Portfolio-ready |
+| [Edge AI Maintenance Gateway](edge-ai-maintenance-gateway/) | Ingest TinyML telemetry, store events locally, and expose gateway APIs/dashboard data. | JSONL replay, HTTP ingest contract, SQLite, dashboard, Linux gateway | `python scripts/run_gateway_demo.py` | Demo-ready |
+| [Edge Vision Inspection](edge-vision-inspection/) | Detect synthetic visual defects and produce annotated inspection reports. | Image features, batch replay, annotated outputs, edge inspection | `python scripts/run_vision_demo.py` | Demo-ready |
+| [EdgeBench](edgebench/) | Measure latency and footprint for edge AI model artifacts. | Benchmark CLI, latency, throughput, report generation | `python -m edgebench run --model ../tinyml-predictive-maintenance/artifacts/model.json --input-size 10` | Utility |
 
-Simulates an MCU/RTOS vibration-monitoring node and an embedded Linux gateway.
-It covers real-time sampling, FFT/statistical feature extraction, tiny anomaly
-detection, telemetry, and dashboard visualization.
+## Highlight: Edge Audio Anomaly Service
 
-### 2. EdgeBench
+This is currently the strongest embedded Linux application-layer project in the
+repo. It demonstrates the complete path from replay input to deployable service:
 
-Path: `edgebench`
+- Synthetic WAV and MIMII/ToyADMOS-style folder evaluation.
+- Nine lightweight audio features for low-resource edge inference.
+- Centroid anomaly detector with optional ONNX Runtime backend.
+- Raw anomaly output separated from debounced equipment alarm state.
+- SQLite event buffer with `uploaded` and `ack` fields for offline operation.
+- FastAPI contracts for upload, event query, health check, metrics, and ack.
+- systemd service file and logrotate example.
 
-A lightweight benchmark CLI for edge AI inference. It measures latency,
-throughput, model footprint, and generates reproducible reports.
+![Audio score curve](edge-audio-anomaly-service/reports/audio_score_curve.png)
 
-### 3. Edge AI Maintenance Gateway
+Key reports:
 
-Path: `edge-ai-maintenance-gateway`
+- [Audio anomaly report](edge-audio-anomaly-service/reports/audio_anomaly_report.md)
+- [Model deployment report](edge-audio-anomaly-service/reports/model_deployment_report.md)
+- [Public audio evaluation report](edge-audio-anomaly-service/reports/public_audio_evaluation.md)
 
-An embedded Linux application-layer gateway. It replays TinyML telemetry,
-buffers it in SQLite, exposes API route contracts, and generates a local
-dashboard/report.
-
-### 4. Edge Audio Anomaly Service
-
-Path: `edge-audio-anomaly-service`
-
-An industrial audio anomaly service. It generates synthetic WAV clips, extracts
-audio features, runs lightweight anomaly detection, and writes reports.
-
-### 5. Edge Vision Inspection
-
-Path: `edge-vision-inspection`
-
-An edge visual inspection app. It generates synthetic defect images, extracts
-lightweight image features, detects defects, and saves annotated outputs.
-
-## Suggested Resume Positioning
-
-Use the first project as the MCU/TinyML anchor, the three edge projects as
-embedded Linux application-layer demos, and EdgeBench as a supporting
-measurement tool:
+API surface:
 
 ```text
-TinyML Predictive Maintenance System
-├── simulated RTOS node
-├── float + Q24.8 C inference parity
-├── Edge AI Maintenance Gateway
-├── Edge Audio Anomaly Service
-├── Edge Vision Inspection
-└── EdgeBench latency/model-footprint reports
+POST /api/v1/audio/analyze
+POST /api/v1/audio/analyze-windowed
+POST /api/v1/audio/upload
+POST /api/v1/audio/events/ack
+GET  /api/v1/audio/events
+GET  /api/v1/audio/summary
+GET  /healthz
+GET  /metrics
 ```
 
-## Development Order
+## Quick Start
 
-1. Run `tinyml-predictive-maintenance` end to end.
-2. Use `edgebench` to benchmark its exported JSON model.
-3. Add reports and screenshots to each project README.
-4. Later, replace the simulated sensor with a real I2C/SPI accelerometer.
-
-## Required Tools
-
-- Python 3.10+
-- pip
-- Optional: ripgrep (`rg`) for fast code search
-
-Install project dependencies:
-
-```powershell
-cd E:\linux\tinyml-predictive-maintenance
-.\setup.ps1
-
-cd E:\linux\edgebench
-.\setup.ps1
-```
-
-If `pip install` reports `getaddrinfo failed`, the shell cannot resolve DNS.
-Fix the network/DNS issue first, then rerun the setup scripts.
-
-Optional `rg` install on Windows:
-
-```powershell
-winget install --id BurntSushi.ripgrep.MSVC -e
-```
-
-After dependencies are installed, verify the full portfolio:
+Use the shared Python environment you already created for the TinyML project:
 
 ```powershell
 cd E:\linux
-.\smoke-test.ps1
+$env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
+.\tinyml-predictive-maintenance\.venv\Scripts\python.exe -m pytest -q edge-audio-anomaly-service
 ```
+
+Run the main demos:
+
+```powershell
+cd E:\linux\edge-audio-anomaly-service
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\run_audio_demo.py
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\evaluate_public_audio_dataset.py
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\benchmark_model_backends.py
+```
+
+Full local smoke test:
+
+```powershell
+cd E:\linux
+.\smoke-test.ps1 -Python "E:\linux\tinyml-predictive-maintenance\.venv\Scripts\python.exe"
+```
+
+## Interview Pitch
+
+Use this repo as a compact story:
+
+> I built a hardware-free AI + embedded portfolio. One project simulates a
+> TinyML predictive-maintenance node with MCU-oriented deployment artifacts.
+> The Linux-side projects turn model outputs into services: telemetry gateway,
+> industrial audio anomaly service, visual inspection, SQLite buffering, API
+> contracts, reports, and systemd deployment.
+
+Best project to lead with:
+
+> Edge Audio Anomaly Service: a Linux edge service that replays or uploads WAV
+> audio, extracts low-cost spectral features, runs a small anomaly model or ONNX
+> backend, debounces alarms, stores events in SQLite for offline operation, and
+> exposes health/metrics/API endpoints.
+
+More detail:
+
+- [Portfolio roadmap](docs/portfolio-roadmap.md)
+- [Interview cheatsheet](docs/interview-cheatsheet.md)

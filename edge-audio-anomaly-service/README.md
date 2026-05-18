@@ -85,6 +85,8 @@ alarm windows: 33
 The demo writes `reports/audio_anomaly_report.md` and
 `reports/audio_score_curve.png`.
 
+![Edge Audio 30-second demo](../docs/assets/edge-audio-demo.gif)
+
 ![Edge Audio dashboard](../docs/assets/edge-audio-dashboard.png)
 
 ```mermaid

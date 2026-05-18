@@ -45,6 +45,8 @@ repo. It demonstrates the complete path from replay input to deployable service:
 - FastAPI contracts for upload, event query, health check, metrics, and ack.
 - systemd service file and logrotate example.
 
+![Edge Audio 30-second demo](docs/assets/edge-audio-demo.gif)
+
 ![Edge Audio dashboard](docs/assets/edge-audio-dashboard.png)
 
 ```mermaid

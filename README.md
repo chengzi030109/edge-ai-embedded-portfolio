@@ -31,7 +31,21 @@ repo. It demonstrates the complete path from replay input to deployable service:
 - FastAPI contracts for upload, event query, health check, metrics, and ack.
 - systemd service file and logrotate example.
 
+```mermaid
+flowchart LR
+    A["WAV replay / HTTP upload"] --> B["Windowed audio features"]
+    B --> C["Centroid or ONNX backend"]
+    C --> D["Alarm debounce"]
+    D --> E["SQLite event buffer"]
+    E --> F["FastAPI: events, ack, healthz, metrics"]
+    E --> G["Markdown / JSON reports"]
+```
+
 ![Audio score curve](edge-audio-anomaly-service/reports/audio_score_curve.png)
+
+| Public Audio Evaluation | Model Deployment |
+|---|---|
+| ![Public audio evaluation](edge-audio-anomaly-service/reports/figures/public_audio_eval_summary.png) | ![Model deployment summary](edge-audio-anomaly-service/reports/figures/model_deployment_summary.png) |
 
 Key reports:
 
@@ -99,3 +113,15 @@ More detail:
 
 - [Portfolio roadmap](docs/portfolio-roadmap.md)
 - [Interview cheatsheet](docs/interview-cheatsheet.md)
+- [Resume project writeups](docs/resume-projects.md)
+- [Demo script](docs/demo-script.md)
+
+## Showcase Figures
+
+The small summary figures in `edge-audio-anomaly-service/reports/figures/` are
+generated from report JSON files:
+
+```powershell
+cd E:\linux\edge-audio-anomaly-service
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\generate_showcase_figures.py
+```

@@ -60,7 +60,30 @@ alarm windows: 33
 The demo writes `reports/audio_anomaly_report.md` and
 `reports/audio_score_curve.png`.
 
+```mermaid
+flowchart LR
+    A["WAV folder replay"] --> B["Sliding windows"]
+    U["POST /api/v1/audio/upload"] --> B
+    B --> C["RMS/ZCR/spectral features"]
+    C --> D["centroid or ONNX backend"]
+    D --> E["raw anomaly score"]
+    E --> F["AlarmDebouncer"]
+    F --> G["SQLite events: uploaded/ack"]
+    G --> H["/metrics and /healthz"]
+    G --> I["Reports and anomaly clips"]
+```
+
 ![Audio score curve](reports/audio_score_curve.png)
+
+| Public Audio Evaluation | Model Deployment |
+|---|---|
+| ![Public audio evaluation](reports/figures/public_audio_eval_summary.png) | ![Model deployment summary](reports/figures/model_deployment_summary.png) |
+
+Regenerate the summary figures from report JSON:
+
+```powershell
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\generate_showcase_figures.py
+```
 
 ## API Contract
 

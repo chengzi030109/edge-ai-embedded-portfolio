@@ -114,7 +114,9 @@ More detail:
 - [Portfolio roadmap](docs/portfolio-roadmap.md)
 - [Interview cheatsheet](docs/interview-cheatsheet.md)
 - [Resume project writeups](docs/resume-projects.md)
+- [Resume-ready short version](docs/resume-short.md)
 - [Demo script](docs/demo-script.md)
+- [3-minute demo script](docs/demo-script-3min.md)
 
 ## Showcase Figures
 

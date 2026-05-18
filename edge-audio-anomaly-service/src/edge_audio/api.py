@@ -46,6 +46,7 @@ def create_app(
         from fastapi.responses import HTMLResponse, PlainTextResponse
     except Exception as exc:  # pragma: no cover
         raise RuntimeError("FastAPI is optional; install requirements.txt or pip install -e .[api] to run the API server") from exc
+    globals()["UploadFile"] = UploadFile
 
     app = FastAPI(title="Edge Audio Anomaly Service")
     conn = connect(database_path)
@@ -441,10 +442,18 @@ DASHBOARD_HTML = r"""<!doctype html>
       body.append('label', label);
       const status = document.getElementById('upload-status');
       status.textContent = 'uploading and analyzing...';
-      const response = await fetch('/api/v1/audio/upload', { method: 'POST', body });
-      const payload = await response.json();
-      status.textContent = `analyzed ${payload.count || 0} windows; alarms ${payload.alarms || 0}`;
-      await refresh();
+      try {
+        const response = await fetch('/api/v1/audio/upload', { method: 'POST', body });
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `HTTP ${response.status}`);
+        }
+        const payload = await response.json();
+        status.textContent = `analyzed ${payload.count || 0} windows; alarms ${payload.alarms || 0}`;
+        await refresh();
+      } catch (err) {
+        status.textContent = `upload failed: ${err.message || err}`;
+      }
     });
 
     refresh();

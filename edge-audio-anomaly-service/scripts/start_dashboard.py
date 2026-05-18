@@ -67,6 +67,7 @@ def main() -> None:
         database_path=cfg.database_path,
         backend=args.backend or cfg.model_backend,
         onnx_model_path=cfg.onnx_model_path,
+        safe_roots=[cfg.data_dir],
     )
     uvicorn.run(app, host=args.host, port=args.port, log_level="info")
 

@@ -18,7 +18,7 @@ AI + 嵌入式 Linux 边缘智能作品集：包含 TinyML 预测性维护、工
 
 ## GitHub Pinned Repo 一句话
 
-Hardware-free AI + embedded Linux portfolio with TinyML maintenance, ONNX audio anomaly service, SQLite buffering, FastAPI/systemd deployment, and CI-backed demos.
+Hardware-free edge AI + embedded portfolio with TinyML maintenance, ONNX audio anomaly service, SQLite buffering, FastAPI/systemd deployment, and CI-backed demos.
 
 ## 关键词
 

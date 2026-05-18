@@ -2,11 +2,12 @@
 
 ## 30-Second Summary
 
-This repository is a hardware-free AI + embedded portfolio. It covers a TinyML
-predictive-maintenance node and several embedded Linux application-layer
-services. The strongest demo is the audio anomaly service: it handles WAV replay
-or upload, extracts lightweight features, runs anomaly inference, debounces
-alarms, buffers events in SQLite, and exposes API/systemd deployment hooks.
+This repository is a hardware-free edge AI + embedded monorepo portfolio. It
+covers a TinyML predictive-maintenance node and several embedded Linux
+application-layer services. The strongest demo is the audio anomaly service: it
+handles WAV replay or upload, extracts lightweight features, runs anomaly
+inference, debounces alarms, buffers events in SQLite, and exposes API/systemd
+deployment hooks.
 
 ## Best Project To Present First
 

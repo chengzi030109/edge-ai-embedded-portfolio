@@ -1,8 +1,9 @@
 # Portfolio Roadmap
 
-This roadmap keeps the repository focused on internship value: projects should
-be runnable on a laptop, explainable in interviews, and close to embedded
-deployment patterns.
+This roadmap keeps the monorepo focused on internship value: projects should be
+runnable on a laptop, explainable in interviews, and close to embedded
+deployment patterns. The repository is intentionally kept as one portfolio so a
+reviewer can scan the full AI + embedded story from a single GitHub page.
 
 ## Current Portfolio Shape
 

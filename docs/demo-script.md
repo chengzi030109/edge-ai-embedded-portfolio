@@ -7,7 +7,7 @@ project walkthrough.
 
 Start at:
 
-https://github.com/chengzi030109/ai-embedded-linux-portfolio
+https://github.com/chengzi030109/edge-ai-embedded-portfolio
 
 Point out:
 

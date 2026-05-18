@@ -4,7 +4,7 @@
 
 打开仓库首页：
 
-https://github.com/chengzi030109/ai-embedded-linux-portfolio
+https://github.com/chengzi030109/edge-ai-embedded-portfolio
 
 讲法：
 

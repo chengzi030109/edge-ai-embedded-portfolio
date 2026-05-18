@@ -1,12 +1,26 @@
-# AI + Embedded Linux Portfolio
+# Edge AI + Embedded Portfolio
 
-[![Portfolio CI](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/ci.yml)
-[![TinyML CI](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/tinyml-predictive-maintenance.yml/badge.svg)](https://github.com/chengzi030109/ai-embedded-linux-portfolio/actions/workflows/tinyml-predictive-maintenance.yml)
+[![Portfolio CI](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/ci.yml)
+[![TinyML CI](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/tinyml-predictive-maintenance.yml/badge.svg)](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/tinyml-predictive-maintenance.yml)
 
-Hardware-free AI + embedded projects for internship applications. The portfolio
-covers MCU/TinyML thinking, embedded Linux services, local data buffering,
-ONNX-style deployment, SQLite, FastAPI contracts, systemd deployment, and
-reproducible reports.
+Hardware-free edge AI + embedded portfolio for internship applications. This is
+a single monorepo, not a set of unrelated demos: each subproject covers one
+piece of the embedded AI stack, from MCU/TinyML sensing to embedded Linux
+services, local buffering, ONNX-style deployment, FastAPI contracts, systemd
+deployment, CI, and reproducible reports.
+
+## Monorepo Shape
+
+```text
+E:\linux
+├── tinyml-predictive-maintenance/     # MCU/TinyML anchor
+├── edge-audio-anomaly-service/        # strongest embedded Linux service demo
+├── edge-ai-maintenance-gateway/       # telemetry gateway and local persistence
+├── edge-vision-inspection/            # visual inspection demo
+├── edgebench/                         # small benchmark utility
+├── docs/                              # resume, demo, roadmap, interview notes
+└── .github/workflows/                 # portfolio CI and TinyML CI
+```
 
 ## Project Overview
 

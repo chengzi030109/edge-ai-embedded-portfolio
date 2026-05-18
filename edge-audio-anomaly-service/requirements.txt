@@ -1,5 +1,6 @@
-numpy>=1.24
-pillow>=10.0
-fastapi>=0.110
-uvicorn>=0.27
-python-multipart>=0.0.9
+# Keep dependency truth in pyproject.toml.
+#
+# This file exists for tools and Docker flows that still expect a
+# requirements.txt entrypoint. Installing the local package with the [api]
+# extra pulls the FastAPI runtime without duplicating version pins here.
+.[api]

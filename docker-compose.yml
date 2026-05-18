@@ -3,12 +3,24 @@ services:
     build:
       context: ./edge-audio-anomaly-service
       args:
-        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12-slim}
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12.13-slim@sha256:7026274c107626d7e940e0e5d6730481a4600ae95d5ca7eb532dd4180313fea9}
     image: edge-audio-anomaly-service:portfolio
+    # Map the container process to the reviewer's host UID/GID so files written
+    # into the bind-mounted data/artifacts/reports volumes are not root-owned
+    # on Linux. Defaults to 1000:1000 (typical first-user). On Windows/macOS
+    # Docker Desktop the file ownership is mediated by the VM, so the value
+    # is harmless.
+    user: "${UID:-1000}:${GID:-1000}"
     ports:
       - "8080:8080"
     volumes:
       - ./edge-audio-anomaly-service/data:/app/data
       - ./edge-audio-anomaly-service/artifacts:/app/artifacts
       - ./edge-audio-anomaly-service/reports:/app/reports
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=2).status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     restart: unless-stopped

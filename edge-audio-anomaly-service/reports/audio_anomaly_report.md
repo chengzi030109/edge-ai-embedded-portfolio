@@ -5,8 +5,8 @@
 - Debounced alarm windows: `33`
 - Saved anomaly clips: `35`
 - Raw model precision / recall / F1: `1.000` / `1.000` / `1.000`
-- Avg feature latency: `0.2690 ms`
-- Avg inference latency: `0.0088 ms`
+- Avg feature latency: `0.1510 ms`
+- Avg inference latency: `0.0053 ms`
 - Model backend: `centroid`
 - Model path: `audio_model.json`
 - Figure: `audio_score_curve.png`

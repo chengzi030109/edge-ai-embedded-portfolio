@@ -31,6 +31,7 @@ def create_app(
     database_path: str | Path = "data/audio_events.db",
     backend: str = "centroid",
     onnx_model_path: str | Path = "artifacts/audio_model.onnx",
+    safe_roots: list[str | Path] | None = None,
 ):
     """Create the optional FastAPI application.
 
@@ -39,10 +40,17 @@ def create_app(
     the same feature/model code into a Linux service endpoint. Events are stored
     in SQLite instead of only an in-memory list so the application behaves like
     an edge gateway that can keep local evidence during network outages.
+
+    ``safe_roots`` constrains the ``analyze`` and ``analyze-windowed`` endpoints
+    to a small set of directories. Without this, accepting an arbitrary
+    ``payload["path"]`` would let any HTTP client open files anywhere on the
+    host filesystem (it would not return PCM, but ``read_wav`` would still
+    ``open()`` the file). Defaults cover the demo data directory and the upload
+    directory used by ``/api/v1/audio/upload``.
     """
 
     try:
-        from fastapi import FastAPI, File, UploadFile
+        from fastapi import FastAPI, File, HTTPException, UploadFile
         from fastapi.responses import HTMLResponse, PlainTextResponse
     except Exception as exc:  # pragma: no cover
         raise RuntimeError("FastAPI is optional; install requirements.txt or pip install -e .[api] to run the API server") from exc
@@ -54,6 +62,25 @@ def create_app(
     db_lock = Lock()
     upload_dir = Path(database_path).resolve().parent / "uploads"
     upload_dir.mkdir(parents=True, exist_ok=True)
+
+    data_root = Path(database_path).resolve().parent
+    default_roots = [data_root, upload_dir]
+    extra_roots = [Path(p).resolve() for p in (safe_roots or [])]
+    allowed_roots = [root.resolve() for root in default_roots + extra_roots]
+
+    def resolve_safe_path(raw: str | Path | None) -> Path:
+        if not raw:
+            raise HTTPException(status_code=400, detail="path is required")
+        candidate = Path(str(raw)).resolve()
+        for root in allowed_roots:
+            try:
+                candidate.relative_to(root)
+            except ValueError:
+                continue
+            if not candidate.is_file():
+                raise HTTPException(status_code=404, detail="audio file not found")
+            return candidate
+        raise HTTPException(status_code=400, detail="path is outside the allowed audio roots")
 
     def current_model():
         """Load the configured backend on demand so model files can be replaced."""
@@ -82,15 +109,16 @@ def create_app(
         """
 
         model = current_model()
+        safe_path = resolve_safe_path(payload.get("path"))
         start = time.perf_counter()
-        samples, sr = read_wav(payload["path"])
+        samples, sr = read_wav(safe_path)
         features = extract_features(samples, sr)
         feature_ms = (time.perf_counter() - start) * 1000.0
         infer_start = time.perf_counter()
         result = model.predict(features)
         inference_ms = (time.perf_counter() - infer_start) * 1000.0
         event = {
-            "source": payload["path"],
+            "source": str(safe_path),
             "label": str(payload.get("label", "unknown")),
             "window_index": 0,
             "start_s": 0.0,
@@ -117,8 +145,9 @@ def create_app(
         """Analyze a WAV file as stream windows and persist every event."""
 
         model = current_model()
+        safe_path = resolve_safe_path(payload.get("path"))
         rows = analyze_wav_windows(
-            payload["path"],
+            safe_path,
             str(payload.get("label", "unknown")),
             model,
             float(payload.get("window_seconds", 0.25)),

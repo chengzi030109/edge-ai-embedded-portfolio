@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from edge_audio.alarm import AlarmDebouncer
+from pathlib import Path
+
 import pytest
 
+from edge_audio.alarm import AlarmDebouncer
 from edge_audio.api import ROUTES, create_app
 from edge_audio.backends import load_backend
 from edge_audio.config import load_config
@@ -216,6 +218,19 @@ def test_api_health_metrics_and_upload(tmp_path):
     health = client.get("/healthz")
     assert health.status_code == 200
     assert health.json()["status"] == "ok"
+
+    analyze = client.post("/api/v1/audio/analyze", json={"path": rows[0]["path"], "label": rows[0]["label"]})
+    assert analyze.status_code == 200
+    assert analyze.json()["source"] == str(Path(rows[0]["path"]).resolve())
+
+    outside_file = tmp_path.parent / f"{tmp_path.name}_outside.wav"
+    outside_file.write_bytes(Path(rows[0]["path"]).read_bytes())
+    try:
+        blocked = client.post("/api/v1/audio/analyze-windowed", json={"path": str(outside_file)})
+        assert blocked.status_code == 400
+        assert "outside the allowed audio roots" in blocked.json()["detail"]
+    finally:
+        outside_file.unlink(missing_ok=True)
 
     dashboard = client.get("/dashboard")
     assert dashboard.status_code == 200

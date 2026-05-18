@@ -1,11 +1,6 @@
 # TinyML Predictive Maintenance System
 
-<!--
-Once the repo is pushed to GitHub, replace OWNER with the actual GitHub user/org
-name in the badge URL below. The workflow file is already in place at
-.github/workflows/tinyml-predictive-maintenance.yml.
--->
-[![CI](https://github.com/OWNER/linux/actions/workflows/tinyml-predictive-maintenance.yml/badge.svg)](https://github.com/OWNER/linux/actions/workflows/tinyml-predictive-maintenance.yml)
+[![CI](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/tinyml-predictive-maintenance.yml/badge.svg)](https://github.com/chengzi030109/edge-ai-embedded-portfolio/actions/workflows/tinyml-predictive-maintenance.yml)
 
 Hardware-free AI + embedded predictive-maintenance project. It simulates an
 MCU/RTOS vibration-monitoring node on a laptop today, while keeping the model,
@@ -54,6 +49,14 @@ cd E:\linux\tinyml-predictive-maintenance
 
 # One command for the presentation-oriented demo. It does not need external data.
 .\.venv\Scripts\python.exe scripts\run_portfolio_demo.py --quick
+```
+
+For reviewers who install from `pyproject.toml`, the default install is the
+lightweight synthetic/centroid path:
+
+```bash
+python -m pip install -e .
+python -m pip install -e .[full]  # optional Torch/ONNX/sklearn/CWRU stack
 ```
 
 The demo trains a synthetic model, runs synthetic telemetry, replays CSV sensor
@@ -244,13 +247,6 @@ $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Expected local result after the portfolio polish:
-
-```text
-23 passed, 2 skipped
-```
-
-Skipped tests are optional-stack checks for local Windows environments with
-broken `torch`/`sklearn` imports due to system `asyncio/_overlapped` issues.
-The C parity tests run locally when `E:\tools\tcc\tcc` or another C compiler is
-on `PATH`.
+All required tests pass. Some tests are conditionally skipped: torch-dependent
+checks when `torch` is unavailable, and the C parity tests when no C compiler
+is on `PATH` (locally `E:\tools\tcc\tcc` or any system `gcc`/`clang` works).

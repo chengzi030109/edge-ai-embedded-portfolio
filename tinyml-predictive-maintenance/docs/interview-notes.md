@@ -44,15 +44,10 @@ $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD='1'
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Expected local result after installing the E-drive C toolchain:
-
-```text
-23 passed, 2 skipped
-```
-
-The important talking point is that C parity tests now run locally. The two
-skips are optional Python ML-stack checks affected by the local Windows
-`asyncio/_overlapped` issue.
+The exact test count changes as the portfolio grows, so quote the current
+`pytest` output rather than memorizing a number. The important talking point is
+that C parity tests run when a local C compiler is available, while optional
+Python ML-stack checks skip cleanly if the heavy dependencies are absent.
 
 ## Architecture Explanation
 

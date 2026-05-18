@@ -1,8 +1,26 @@
+# Python
 __pycache__/
 *.py[cod]
-.pytest_cache/
-.venv/
 *.egg-info/
+
+# Local caches and venvs (never need to ship to the image)
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Generated content. The compose file bind-mounts host versions of these at
+# run time, so anything baked into the image would only be hidden by the mount.
 data/
-reports/anomaly_clips/
 artifacts/
+reports/anomaly_clips/
+
+# Repository metadata that the runtime never reads.
+.git/
+.github/
+.gitignore
+docs/
+tests/
+*.md
+!README.md

@@ -22,6 +22,16 @@ CI-backed demos.
 
 ## One-Command Demo
 
+Linux/macOS:
+
+```bash
+git clone https://github.com/chengzi030109/edge-ai-embedded-portfolio.git
+cd edge-ai-embedded-portfolio
+docker compose up --build edge-audio
+```
+
+Windows PowerShell, if the repository is already at `E:\linux`:
+
 ```powershell
 cd E:\linux
 docker compose up --build edge-audio
@@ -29,8 +39,13 @@ docker compose up --build edge-audio
 
 Domestic network fallback:
 
+```bash
+PYTHON_IMAGE=docker.m.daocloud.io/library/python:3.12-slim docker compose up --build edge-audio
+```
+
+PowerShell equivalent:
+
 ```powershell
-cd E:\linux
 $env:PYTHON_IMAGE="docker.m.daocloud.io/library/python:3.12-slim"
 docker compose up --build edge-audio
 ```
@@ -58,7 +73,7 @@ from the dashboard and watch alarm counts, recent events, and metrics update.
 ## Monorepo Shape
 
 ```text
-E:\linux
+edge-ai-embedded-portfolio/
 ├── tinyml-predictive-maintenance/     # MCU/TinyML anchor
 ├── edge-audio-anomaly-service/        # strongest embedded Linux service demo
 ├── edge-ai-maintenance-gateway/       # telemetry gateway and local persistence
@@ -105,6 +120,16 @@ Key reports:
 - [Public audio evaluation report](edge-audio-anomaly-service/reports/public_audio_evaluation.md)
 
 ## Local Verification
+
+Linux/macOS:
+
+```bash
+cd edge-ai-embedded-portfolio
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q edge-audio-anomaly-service edge-ai-maintenance-gateway edge-vision-inspection edgebench
+bash smoke-test.sh
+```
+
+Windows PowerShell:
 
 ```powershell
 cd E:\linux

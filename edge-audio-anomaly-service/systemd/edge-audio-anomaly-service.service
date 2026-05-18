@@ -3,6 +3,8 @@ Description=Edge Audio Anomaly Service API
 After=sound.target network.target
 
 [Service]
+User=edge-audio
+Group=edge-audio
 WorkingDirectory=/opt/edge-audio-anomaly-service
 # Keep src/ importable when the project is copied to a board without packaging
 # it into a wheel. A production image can replace this with an installed venv.
@@ -10,6 +12,18 @@ Environment=PYTHONPATH=/opt/edge-audio-anomaly-service/src
 Environment=PYTHONUNBUFFERED=1
 StateDirectory=edge-audio-anomaly-service
 LogsDirectory=edge-audio-anomaly-service
+# Minimum-privilege hardening for an embedded Linux background service. The
+# application can read its installed files under /opt, but writes are limited to
+# demo data, model artifacts, reports, and systemd-managed state/log folders.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/edge-audio-anomaly-service/data
+ReadWritePaths=/opt/edge-audio-anomaly-service/artifacts
+ReadWritePaths=/opt/edge-audio-anomaly-service/reports
+ReadWritePaths=/var/lib/edge-audio-anomaly-service
+ReadWritePaths=/var/log/edge-audio-anomaly-service
 # The API is optional for the local demo. On an embedded Linux target install
 # the [api] dependencies, run scripts/run_audio_demo.py once to create the
 # initial model, then let uvicorn host the service endpoint.

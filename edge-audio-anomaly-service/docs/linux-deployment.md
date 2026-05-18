@@ -59,11 +59,18 @@ For a board image, install dependencies into a venv, copy the project to
 then enable the service file.
 
 ```bash
+sudo useradd --system --home /opt/edge-audio-anomaly-service --shell /usr/sbin/nologin edge-audio
 sudo cp systemd/edge-audio-anomaly-service.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now edge-audio-anomaly-service
 sudo journalctl -u edge-audio-anomaly-service -f
 ```
+
+The unit also demonstrates minimum-privilege service hardening that is useful
+to mention in interviews: it runs as an `edge-audio` user, blocks privilege
+escalation with `NoNewPrivileges=true`, isolates temporary files with
+`PrivateTmp=true`, mounts the system read-only with `ProtectSystem=strict`, and
+only opens explicit write paths for data, artifacts, reports, state, and logs.
 
 When debugging over SSH, query the local buffer directly:
 

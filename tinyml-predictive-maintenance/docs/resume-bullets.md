@@ -65,7 +65,8 @@ Use these numbers as a snapshot, not as permanent claims:
   behavior that is more realistic for gradual degradation.
 - Fixed-point report: `0` parameter-path decision mismatches and `0`
   integer-path decision mismatches in the current generated report.
-- Local tests after installing E-drive TinyCC: `23 passed, 2 skipped`.
+- Local tests run with `pytest`; C parity checks are enabled when TinyCC, GCC,
+  or Clang is available on `PATH`.
 
 ## What Not To Overclaim
 

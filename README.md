@@ -92,6 +92,12 @@ flowchart LR
     E --> G["Markdown / JSON reports"]
 ```
 
+![Audio score curve](edge-audio-anomaly-service/reports/audio_score_curve.png)
+
+| Public Audio Evaluation | Model Deployment |
+|---|---|
+| ![Public audio evaluation](edge-audio-anomaly-service/reports/figures/public_audio_eval_summary.png) | ![Model deployment summary](edge-audio-anomaly-service/reports/figures/model_deployment_summary.png) |
+
 Key reports:
 
 - [Audio anomaly report](edge-audio-anomaly-service/reports/audio_anomaly_report.md)
@@ -111,4 +117,40 @@ Full smoke test:
 ```powershell
 cd E:\linux
 .\smoke-test.ps1 -Python "E:\linux\tinyml-predictive-maintenance\.venv\Scripts\python.exe"
+```
+
+## Interview Pitch
+
+Use this repo as a compact story:
+
+> I built a hardware-free AI + embedded portfolio. One project simulates a
+> TinyML predictive-maintenance node with MCU-oriented deployment artifacts.
+> The Linux-side projects turn model outputs into services: telemetry gateway,
+> industrial audio anomaly service, visual inspection, SQLite buffering, API
+> contracts, reports, and systemd deployment.
+
+Best project to lead with:
+
+> Edge Audio Anomaly Service: a Linux edge service that replays or uploads WAV
+> audio, extracts low-cost spectral features, runs a small anomaly model or ONNX
+> backend, debounces alarms, stores events in SQLite for offline operation, and
+> exposes health/metrics/API endpoints.
+
+More detail:
+
+- [Portfolio roadmap](docs/portfolio-roadmap.md)
+- [Interview cheatsheet](docs/interview-cheatsheet.md)
+- [Resume project writeups](docs/resume-projects.md)
+- [Resume-ready short version](docs/resume-short.md)
+- [Demo script](docs/demo-script.md)
+- [3-minute demo script](docs/demo-script-3min.md)
+
+## Showcase Figures
+
+The small summary figures in `edge-audio-anomaly-service/reports/figures/` are
+generated from report JSON files:
+
+```powershell
+cd E:\linux\edge-audio-anomaly-service
+..\tinyml-predictive-maintenance\.venv\Scripts\python.exe scripts\generate_showcase_figures.py
 ```
